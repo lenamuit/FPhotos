@@ -20,11 +20,10 @@
 
 package vn.lenam.imagegallery;
 
-import android.app.Application;
 import dagger.Module;
 import dagger.Provides;
+import vn.lenam.imagegallery.api.ApiModule;
 import vn.lenam.imagegallery.data.DataModule;
-import vn.lenam.imagegallery.ui.UiModule;
 
 @Module(
         injects = {
@@ -32,7 +31,7 @@ import vn.lenam.imagegallery.ui.UiModule;
         },
         includes = {
                 DataModule.class,
-                UiModule.class
+                ApiModule.class
         }
 )
 public class AppModule {

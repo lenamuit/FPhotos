@@ -1,27 +1,35 @@
 package vn.lenam.imagegallery.ui.login;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.LoggingBehavior;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.Settings;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
 import java.util.Arrays;
 
 import vn.lenam.imagegallery.R;
-import vn.lenam.imagegallery.ui.main.MainActivity;
 
 public class LoginActivity extends ActionBarActivity {
 
     private UiLifecycleHelper uiHelper;
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +39,8 @@ public class LoginActivity extends ActionBarActivity {
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
-        authButton.setReadPermissions(Arrays.asList("email", "user_friends","user_photos"));
+        authButton.setReadPermissions(Arrays.asList("email", "user_friends", "user_photos"));
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,7 +69,7 @@ public class LoginActivity extends ActionBarActivity {
         // may not be triggered. Trigger it if it's open/closed.
         Session session = Session.getActiveSession();
         if (session != null &&
-                (session.isOpened() || session.isClosed()) ) {
+                (session.isOpened() || session.isClosed())) {
             onSessionStateChange(session, session.getState(), null);
         }
         uiHelper.onResume();
@@ -92,29 +99,33 @@ public class LoginActivity extends ActionBarActivity {
         uiHelper.onSaveInstanceState(outState);
     }
 
-    private Session.StatusCallback callback = new Session.StatusCallback() {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    };
-
     /**
      * session state change
+     *
      * @param session
      * @param state
      * @param exception
      */
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (exception !=null)
+        if (exception != null)
             exception.printStackTrace();
-        if (state.isClosed()){
-            Log.e("NamLH","Session close");
-        }
-        else if (state.isOpened()){
-            Log.e("NamLH","Session open");
-            startActivity(new Intent(this,MainActivity.class));
-            finish();
+        if (state.isClosed()) {
+            Log.e("NamLH", "Session close");
+        } else if (state.isOpened()) {
+            Log.e("NamLH", "Session open");
+            Request.executeBatchAsync(Request.newMeRequest(session, new Request.GraphUserCallback() {
+
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+
+                }
+            }));
+            Request request = Request.newGraphPathRequest(session, "photos", new Request.Callback() {
+                @Override
+                public void onCompleted(Response response) {
+                    response.getGraphObject();
+                }
+            });
         }
     }
 }
