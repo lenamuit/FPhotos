@@ -7,10 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
@@ -23,6 +25,7 @@ public class ImageViewFragment extends Fragment {
     private static final String KEY_URL = "key_url";
     @Inject
     Picasso picasso;
+    private PhotoViewAttacher mAttacher;
 
     public static ImageViewFragment getInstance(GraphPhotoInfo url) {
         ImageViewFragment fragment = new ImageViewFragment();
@@ -39,8 +42,18 @@ public class ImageViewFragment extends Fragment {
         String url = getArguments().getString(KEY_URL);
 
         MPOFApp.get(getActivity()).inject(this);
+        mAttacher = new PhotoViewAttacher(imageView);
+        picasso.load(url).into(imageView, new Callback() {
+            @Override
+            public void onSuccess() {
+                mAttacher.update();
+            }
 
-        picasso.load(url).into(imageView);
+            @Override
+            public void onError() {
+
+            }
+        });
         return view;
     }
 }

@@ -52,6 +52,7 @@ public class MainViewImpl extends LinearLayout implements MainView {
         //TODO need inject permission list
         authButton.setReadPermissions(Arrays.asList("email", "user_friends", "user_photos"));
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setOffscreenPageLimit(1);
         imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
         presenter.checkLoginStatus(this);
