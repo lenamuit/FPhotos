@@ -1,11 +1,15 @@
 package vn.lenam.imagegallery.ui;
 
+import android.app.Application;
+
 import com.facebook.Session;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import vn.lenam.imagegallery.MPOFApp;
+import vn.lenam.imagegallery.ui.main.ImageViewFragment;
 import vn.lenam.imagegallery.ui.main.MainActivity;
 import vn.lenam.imagegallery.ui.main.MainPresenter;
 import vn.lenam.imagegallery.ui.main.MainPresenterImpl;
@@ -16,17 +20,15 @@ import vn.lenam.imagegallery.ui.main.MainViewImpl;
  */
 @Module(
         injects = {MainActivity.class,
-                MainViewImpl.class},
+                MainViewImpl.class,
+                MainPresenterImpl.class,
+                ImageViewFragment.class},
         complete = false,
         library = true
 )
 public class UiModule {
 
-    private final MainPresenter presenter;
-
-    public UiModule() {
-        presenter = new MainPresenterImpl();
-    }
+    private MainPresenter presenter;
 
 //    @Provides
 //    public UiLifecycleHelper provideUiLifecycleHelper(MainActivity activity,Session.StatusCallback callback) {
@@ -35,7 +37,9 @@ public class UiModule {
 
     @Provides
     @Singleton
-    public MainPresenter provideMainPresenter() {
+    public MainPresenter provideMainPresenter(Application app) {
+        presenter = new MainPresenterImpl();
+        MPOFApp.get(app).inject(presenter);
         return presenter;
     }
 

@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import com.facebook.widget.LoginButton;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
+import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 
 /**
  * Created by Le Nam on 08-Aug-14.
@@ -33,6 +35,7 @@ public class MainViewImpl extends LinearLayout implements MainView {
     MainPresenter presenter;
 
     FragmentManager fragmentManager;
+    private ImageViewFragmentAdapter imageFragAdapter;
 
     public MainViewImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -49,8 +52,8 @@ public class MainViewImpl extends LinearLayout implements MainView {
         //TODO need inject permission list
         authButton.setReadPermissions(Arrays.asList("email", "user_friends", "user_photos"));
         ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        ImageViewFragmentAdapter adapter = new ImageViewFragmentAdapter(fragmentManager);
-        viewPager.setAdapter(adapter);
+        imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
+        viewPager.setAdapter(imageFragAdapter);
         presenter.checkLoginStatus(this);
     }
 
@@ -64,5 +67,10 @@ public class MainViewImpl extends LinearLayout implements MainView {
     public void showButtonFacebook() {
         if (lnLogin != null)
             lnLogin.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void addPhotos(List<GraphPhotoInfo> photos) {
+        imageFragAdapter.addPhotos(photos);
     }
 }

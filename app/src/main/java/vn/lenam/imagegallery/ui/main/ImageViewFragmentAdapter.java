@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+
 /**
  * Created by Le Nam on 07-Aug-14.
  */
@@ -15,9 +17,13 @@ public class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
 
     public ImageViewFragmentAdapter(FragmentManager fm) {
         super(fm);
-        for (int i = 0; i < 10; i++) {
-            fragmentList.add(new ImageViewFragment());
+    }
+
+    public void addPhotos(List<GraphPhotoInfo> photos) {
+        for (GraphPhotoInfo p : photos) {
+            fragmentList.add(ImageViewFragment.getInstance(p));
         }
+        notifyDataSetChanged();
     }
 
     @Override

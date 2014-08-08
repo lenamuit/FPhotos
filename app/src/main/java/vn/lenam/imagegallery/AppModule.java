@@ -20,6 +20,10 @@
 
 package vn.lenam.imagegallery;
 
+import android.app.Application;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.api.ApiModule;
@@ -42,10 +46,12 @@ public class AppModule {
 
     public AppModule(MPOFApp app) {
         this.app = app;
+
     }
 
     @Provides
-    public MPOFApp provideApplication() {
+    @Singleton
+    public Application provideApplication() {
         return app;
     }
 }
