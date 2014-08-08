@@ -24,6 +24,7 @@ import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.api.ApiModule;
 import vn.lenam.imagegallery.data.DataModule;
+import vn.lenam.imagegallery.ui.UiModule;
 
 @Module(
         injects = {
@@ -31,7 +32,8 @@ import vn.lenam.imagegallery.data.DataModule;
         },
         includes = {
                 DataModule.class,
-                ApiModule.class
+                ApiModule.class,
+                UiModule.class
         }
 )
 public class AppModule {

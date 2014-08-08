@@ -44,4 +44,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
     compile project(':facebook')
     compile 'com.android.support:support-v4:19.+'
+    compile 'com.squareup.picasso:picasso:2.3.3'
 }

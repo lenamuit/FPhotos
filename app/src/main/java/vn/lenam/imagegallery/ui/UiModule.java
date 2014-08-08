@@ -1,43 +1,47 @@
 package vn.lenam.imagegallery.ui;
 
 import com.facebook.Session;
-import com.facebook.UiLifecycleHelper;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import vn.lenam.imagegallery.AppModule;
-import vn.lenam.imagegallery.api.SessionStatusCallback;
 import vn.lenam.imagegallery.ui.main.MainActivity;
 import vn.lenam.imagegallery.ui.main.MainPresenter;
 import vn.lenam.imagegallery.ui.main.MainPresenterImpl;
+import vn.lenam.imagegallery.ui.main.MainViewImpl;
 
 /**
  * Created by Le Nam on 06-Aug-14.
  */
 @Module(
-        injects = MainActivity.class,
-        addsTo = AppModule.class
+        injects = {MainActivity.class,
+                MainViewImpl.class},
+        complete = false,
+        library = true
 )
 public class UiModule {
 
-    private final MainActivity activity;
+    private final MainPresenter presenter;
 
-    public UiModule(MainActivity activity) {
-        this.activity = activity;
+    public UiModule() {
+        presenter = new MainPresenterImpl();
     }
 
-    @Provides
-    public UiLifecycleHelper provideUiLifecycleHelper(Session.StatusCallback callback) {
-        return new UiLifecycleHelper(activity, callback);
-    }
+//    @Provides
+//    public UiLifecycleHelper provideUiLifecycleHelper(MainActivity activity,Session.StatusCallback callback) {
+//        return new UiLifecycleHelper(activity, callback);
+//    }
 
     @Provides
+    @Singleton
     public MainPresenter provideMainPresenter() {
-        return new MainPresenterImpl(activity);
+        return presenter;
     }
 
     @Provides
-    public Session.StatusCallback provideSessionStatusCallback(MainPresenter presenter) {
-        return new SessionStatusCallback(presenter);
+    @Singleton
+    public Session.StatusCallback provideSessionStatusCallback() {
+        return (Session.StatusCallback) presenter;
     }
 }
