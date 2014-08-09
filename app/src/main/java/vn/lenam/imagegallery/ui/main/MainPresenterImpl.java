@@ -1,7 +1,5 @@
 package vn.lenam.imagegallery.ui.main;
 
-import android.util.Log;
-
 import com.facebook.Session;
 import com.facebook.SessionState;
 
@@ -9,17 +7,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import vn.lenam.imagegallery.api.OnRequestPhotoCompleted;
-import vn.lenam.imagegallery.api.RequestPhotos;
+import vn.lenam.imagegallery.api.OnRequestListCompleted;
+import vn.lenam.imagegallery.api.RequestApi;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 
 /**
  * Created by namlh on 8/7/14.
  */
-public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestPhotoCompleted {
+public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestListCompleted<GraphPhotoInfo> {
 
     @Inject
-    RequestPhotos requestPhotos;
+    RequestApi<GraphPhotoInfo> requestPhotos;
 
     private MainView mainView;
     private boolean isSessionOpened = false;
@@ -29,7 +27,7 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
         mainView = view;
         if (isSessionOpened) {
             mainView.hideButtonFacebook();
-            requestPhotos.request("me/photos", this);
+            requestPhotos.request(this);
         } else {
             mainView.showButtonFacebook();
         }
@@ -40,7 +38,6 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
         if (exception != null)
             exception.printStackTrace();
         if (state.isClosed()) {
-            Log.e("NamLH", "Session close");
             isSessionOpened = false;
         } else if (state.isOpened()) {
             isSessionOpened = true;

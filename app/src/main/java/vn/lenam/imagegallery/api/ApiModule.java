@@ -16,6 +16,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 
 /**
  * Created by namlh on 8/6/14.
@@ -64,7 +65,7 @@ public class ApiModule {
     }
 
     @Provides
-    public RequestPhotos provideRequestPhoto() {
-        return new RequestPhotos();
+    public RequestApi<GraphPhotoInfo> provideRequestPhoto() {
+        return RequestPhotoInList.getInstance();
     }
 }
