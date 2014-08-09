@@ -5,4 +5,6 @@ package vn.lenam.imagegallery.ui.main;
  */
 public interface MainPresenter {
     void checkLoginStatus(MainView view);
+
+    void onNeedLoadmore();
 }

@@ -1,4 +1,4 @@
-package vn.lenam.imagegallery.ui.main;
+package vn.lenam.imagegallery.ui;
 
 import android.content.Intent;
 import android.os.Bundle;

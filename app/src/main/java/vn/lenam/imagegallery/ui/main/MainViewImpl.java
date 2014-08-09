@@ -24,7 +24,7 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 /**
  * Created by Le Nam on 08-Aug-14.
  */
-public class MainViewImpl extends LinearLayout implements MainView {
+public class MainViewImpl extends LinearLayout implements MainView, ViewPager.OnPageChangeListener {
 
     @InjectView(R.id.authButton)
     LoginButton authButton;
@@ -55,6 +55,7 @@ public class MainViewImpl extends LinearLayout implements MainView {
         viewPager.setOffscreenPageLimit(1);
         imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
+        viewPager.setOnPageChangeListener(this);
         presenter.checkLoginStatus(this);
     }
 
@@ -73,5 +74,22 @@ public class MainViewImpl extends LinearLayout implements MainView {
     @Override
     public void addPhotos(List<GraphPhotoInfo> photos) {
         imageFragAdapter.addPhotos(photos);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position >= imageFragAdapter.getCount() - 5) {
+            presenter.onNeedLoadmore();
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

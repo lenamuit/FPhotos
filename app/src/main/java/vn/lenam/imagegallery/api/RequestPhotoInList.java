@@ -1,5 +1,7 @@
 package vn.lenam.imagegallery.api;
 
+import android.util.Log;
+
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -13,6 +15,8 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
 
     private OnRequestListCompleted<GraphPhotoInfo> onRequestPhotoCompleted;
+    private Request request;
+    private boolean hasChanged = false;
 
     public static RequestApi<GraphPhotoInfo> getInstance() {
         return new RequestPhotoInList();
@@ -23,6 +27,9 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
         GraphObjectList<GraphPhotoInfo> listPhoto = response.getGraphObject().getPropertyAsList("data", GraphPhotoInfo.class);
         if (listPhoto != null) {
             onRequestPhotoCompleted.onCompleted(listPhoto);
+            request = response.getRequestForPagedResults(Response.PagingDirection.NEXT);
+            request.setCallback(this);
+            hasChanged = true;
         }
     }
 
@@ -31,13 +38,17 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
         Session session = Session.getActiveSession();
         this.onRequestPhotoCompleted = callback;
         if (session.isOpened()) {
-            Request request = Request.newGraphPathRequest(Session.getActiveSession(), "me/photos", this);
+            request = Request.newGraphPathRequest(Session.getActiveSession(), "me/photos", this);
             Request.executeBatchAsync(request);
         }
     }
 
     @Override
     public void loadmore() {
-
+        Log.i("loadmore", "hasChanged = " + hasChanged);
+        if (request != null && hasChanged) {
+            hasChanged = false;
+            Request.executeBatchAsync(request);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package vn.lenam.imagegallery.ui.main;
 
+import android.util.Log;
+
 import com.facebook.Session;
 import com.facebook.SessionState;
 
@@ -25,12 +27,18 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
     @Override
     public void checkLoginStatus(MainView view) {
         mainView = view;
+        Log.i("checkLoginStatus", "Session opened = " + isSessionOpened);
         if (isSessionOpened) {
             mainView.hideButtonFacebook();
             requestPhotos.request(this);
         } else {
             mainView.showButtonFacebook();
         }
+    }
+
+    @Override
+    public void onNeedLoadmore() {
+        requestPhotos.loadmore();
     }
 
     @Override

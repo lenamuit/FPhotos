@@ -10,7 +10,6 @@ import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.ui.main.ImageViewFragment;
-import vn.lenam.imagegallery.ui.main.MainActivity;
 import vn.lenam.imagegallery.ui.main.MainPresenter;
 import vn.lenam.imagegallery.ui.main.MainPresenterImpl;
 import vn.lenam.imagegallery.ui.main.MainViewImpl;
