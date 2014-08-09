@@ -9,16 +9,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import vn.lenam.imagegallery.api.OnRequestPhotoCompleted;
 import vn.lenam.imagegallery.api.RequestPhotos;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 
 /**
  * Created by namlh on 8/7/14.
  */
-public class MainPresenterImpl implements MainPresenter, Session.StatusCallback {
+public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestPhotoCompleted {
 
     @Inject
     RequestPhotos requestPhotos;
+
     private MainView mainView;
     private boolean isSessionOpened = false;
 
@@ -27,17 +29,11 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback 
         mainView = view;
         if (isSessionOpened) {
             mainView.hideButtonFacebook();
-            requestPhotos.request("photos", this);
+            requestPhotos.request("me/photos", this);
         } else {
             mainView.showButtonFacebook();
         }
     }
-
-    @Override
-    public void onLoadPhotoFinnished(List<GraphPhotoInfo> photos) {
-        mainView.addPhotos(photos);
-    }
-
 
     @Override
     public void call(Session session, SessionState state, Exception exception) {
@@ -52,5 +48,10 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback 
         if (mainView != null) {
             checkLoginStatus(mainView);
         }
+    }
+
+    @Override
+    public void onCompleted(List<GraphPhotoInfo> photos) {
+        mainView.addPhotos(photos);
     }
 }
