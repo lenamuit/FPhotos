@@ -9,6 +9,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.MPOFApp;
+import vn.lenam.imagegallery.ui.album.AlbumsPresenter;
+import vn.lenam.imagegallery.ui.album.AlbumsPresenterImpl;
+import vn.lenam.imagegallery.ui.album.AlbumsViewImpl;
+import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 import vn.lenam.imagegallery.ui.main.ImageViewFragment;
 import vn.lenam.imagegallery.ui.main.MainPresenter;
 import vn.lenam.imagegallery.ui.main.MainPresenterImpl;
@@ -21,18 +25,15 @@ import vn.lenam.imagegallery.ui.main.MainViewImpl;
         injects = {MainActivity.class,
                 MainViewImpl.class,
                 MainPresenterImpl.class,
-                ImageViewFragment.class},
+                ImageViewFragment.class,
+                AlbumsPresenterImpl.class,
+                AlbumsViewImpl.class},
         complete = false,
         library = true
 )
 public class UiModule {
 
     private MainPresenter presenter;
-
-//    @Provides
-//    public UiLifecycleHelper provideUiLifecycleHelper(MainActivity activity,Session.StatusCallback callback) {
-//        return new UiLifecycleHelper(activity, callback);
-//    }
 
     @Provides
     @Singleton
@@ -44,7 +45,22 @@ public class UiModule {
 
     @Provides
     @Singleton
+    public AlbumsPresenter provideAlbumPresenter(Application app) {
+        AlbumsPresenterImpl albumsPresenter = new AlbumsPresenterImpl();
+        MPOFApp.get(app).inject(albumsPresenter);
+        return albumsPresenter;
+    }
+
+    @Provides
+    @Singleton
     public Session.StatusCallback provideSessionStatusCallback() {
         return (Session.StatusCallback) presenter;
     }
+
+    @Provides
+    @Singleton
+    public OnAlbumSelected provideOnAlbumSelected() {
+        return (OnAlbumSelected) presenter;
+    }
+
 }

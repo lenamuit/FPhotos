@@ -28,17 +28,19 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
         if (listPhoto != null) {
             onRequestPhotoCompleted.onCompleted(listPhoto);
             request = response.getRequestForPagedResults(Response.PagingDirection.NEXT);
-            request.setCallback(this);
-            hasChanged = true;
+            if (request != null) {
+                request.setCallback(this);
+                hasChanged = true;
+            }
         }
     }
 
     @Override
-    public void request(OnRequestListCompleted<GraphPhotoInfo> callback) {
+    public void request(String path, OnRequestListCompleted<GraphPhotoInfo> callback) {
         Session session = Session.getActiveSession();
         this.onRequestPhotoCompleted = callback;
         if (session.isOpened()) {
-            request = Request.newGraphPathRequest(Session.getActiveSession(), "me/photos", this);
+            request = Request.newGraphPathRequest(Session.getActiveSession(), path, this);
             Request.executeBatchAsync(request);
         }
     }

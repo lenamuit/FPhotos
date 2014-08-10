@@ -36,6 +36,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     FragmentManager fragmentManager;
     private ImageViewFragmentAdapter imageFragAdapter;
+    private ViewPager viewPager;
 
     public MainViewImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,8 +52,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         ButterKnife.inject(this);
         //TODO need inject permission list
         authButton.setReadPermissions(Arrays.asList("email", "user_friends", "user_photos"));
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setOffscreenPageLimit(1);
+        viewPager = (ViewPager) findViewById(R.id.pager);
         imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
         viewPager.setOnPageChangeListener(this);
@@ -74,6 +74,11 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @Override
     public void addPhotos(List<GraphPhotoInfo> photos) {
         imageFragAdapter.addPhotos(photos);
+    }
+
+    @Override
+    public void clearPhotos() {
+        imageFragAdapter.clear();
     }
 
     @Override

@@ -32,7 +32,17 @@ public class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    @Override
     public int getCount() {
         return fragmentList.size();
+    }
+
+    public void clear() {
+        fragmentList.clear();
+        notifyDataSetChanged();
     }
 }

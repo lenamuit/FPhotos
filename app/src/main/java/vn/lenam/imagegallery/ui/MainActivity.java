@@ -11,8 +11,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
+import vn.lenam.imagegallery.ui.album.AlbumsViewImpl;
 
 
 /**
@@ -24,6 +26,8 @@ public class MainActivity extends FragmentActivity {
     UiLifecycleHelper uiHelper;
     @Inject
     Session.StatusCallback sessionStatusCallback;
+
+    private AlbumsViewImpl albumsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +41,14 @@ public class MainActivity extends FragmentActivity {
         uiHelper = new UiLifecycleHelper(this, sessionStatusCallback);
         uiHelper.onCreate(savedInstanceState);
 
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
+
     }
 
     @Override
@@ -67,5 +73,13 @@ public class MainActivity extends FragmentActivity {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
+    }
+
+    @OnClick(R.id.btn_albums)
+    void showAblumPopup() {
+        if (albumsView == null) {
+            albumsView = new AlbumsViewImpl(this);
+        }
+        albumsView.show();
     }
 }

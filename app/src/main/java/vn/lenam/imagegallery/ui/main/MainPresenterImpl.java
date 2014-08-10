@@ -11,12 +11,14 @@ import javax.inject.Inject;
 
 import vn.lenam.imagegallery.api.OnRequestListCompleted;
 import vn.lenam.imagegallery.api.RequestApi;
+import vn.lenam.imagegallery.api.model.GraphAlbum;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 
 /**
  * Created by namlh on 8/7/14.
  */
-public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestListCompleted<GraphPhotoInfo> {
+public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestListCompleted<GraphPhotoInfo>, OnAlbumSelected {
 
     @Inject
     RequestApi<GraphPhotoInfo> requestPhotos;
@@ -30,7 +32,7 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
         Log.i("checkLoginStatus", "Session opened = " + isSessionOpened);
         if (isSessionOpened) {
             mainView.hideButtonFacebook();
-            requestPhotos.request(this);
+            requestPhotos.request("me/photos", this);
         } else {
             mainView.showButtonFacebook();
         }
@@ -58,5 +60,18 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
     @Override
     public void onCompleted(List<GraphPhotoInfo> photos) {
         mainView.addPhotos(photos);
+    }
+
+    /**
+     * on album selected
+     *
+     * @param album
+     */
+    @Override
+    public void onSelected(GraphAlbum album) {
+        Log.e("Namlh", "select album " + album.getName());
+        mainView.clearPhotos();
+        requestPhotos.request(album.getId() + "/photos", this);
+
     }
 }

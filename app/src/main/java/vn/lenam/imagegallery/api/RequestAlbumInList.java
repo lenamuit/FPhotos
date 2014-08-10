@@ -23,11 +23,11 @@ class RequestAlbumInList implements RequestApi<GraphAlbum> {
     }
 
     @Override
-    public void request(OnRequestListCompleted<GraphAlbum> callback) {
+    public void request(String path, OnRequestListCompleted<GraphAlbum> callback) {
         this.callback = callback;
         Session session = Session.getActiveSession();
         if (session.isOpened()) {
-            Request request = Request.newGraphPathRequest(Session.getActiveSession(), "me/albums", this);
+            Request request = Request.newGraphPathRequest(Session.getActiveSession(), path, this);
             Request.executeBatchAsync(request);
         }
     }

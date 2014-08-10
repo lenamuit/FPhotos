@@ -14,4 +14,6 @@ public interface MainView {
     void showButtonFacebook();
 
     void addPhotos(List<GraphPhotoInfo> photos);
+
+    void clearPhotos();
 }
