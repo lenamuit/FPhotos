@@ -43,7 +43,6 @@ public class ImageViewFragment extends Fragment {
         View view = inflater.inflate(R.layout.imageview_fragment, null);
         imageView = (ImageView) view.findViewById(R.id.imgView);
         String url = getArguments().getString(KEY_URL);
-
         imageLoader.get(url, new ImageLoader.ImageListener() {
             @Override
             public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {

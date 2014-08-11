@@ -30,13 +30,17 @@ public class AlbumsAdapter extends ArrayAdapter<GraphAlbum> {
         } else {
             holder = (Holder) convertView.getTag();
         }
-        holder.tvName.setText(getItem(position).getName());
+        GraphAlbum album = getItem(position);
+        holder.tvName.setText(album.getName());
+        holder.tvCount.setText(getContext().getString(R.string.num_photos, album.getCount()));
         return convertView;
     }
 
     static class Holder {
         @InjectView(R.id.tv_name)
         TextView tvName;
+        @InjectView(R.id.tv_count)
+        TextView tvCount;
 
         public Holder(View view) {
             ButterKnife.inject(this, view);

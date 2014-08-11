@@ -1,12 +1,16 @@
 package vn.lenam.imagegallery.ui.main;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.facebook.widget.LoginButton;
 
@@ -17,6 +21,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
@@ -33,6 +38,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Inject
     MainPresenter presenter;
+
 
     FragmentManager fragmentManager;
     private ImageViewFragmentAdapter imageFragAdapter;
@@ -83,6 +89,24 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     }
 
     @Override
+    public void sharePhoto(String path) {
+        Log.w("Share path", path);
+        Uri imageUri = Uri.parse("file://" + path);
+
+        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+        sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+        sharingIntent.setType("image/png");
+        getContext().startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.msg_share_image)));
+    }
+
+    @Override
+    public void savePhotoSuccess() {
+        Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.msg_save_gallery), Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
     }
@@ -97,5 +121,11 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+
+    @OnClick(R.id.btn_share)
+    void shareBitmap() {
+        int pos = viewPager.getCurrentItem();
+        presenter.shareBitmap(imageFragAdapter.getPhoto(pos), this);
     }
 }

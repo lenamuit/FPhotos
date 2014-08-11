@@ -13,7 +13,9 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
  * Created by Le Nam on 07-Aug-14.
  */
 public class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
-    List<Fragment> fragmentList = new ArrayList<Fragment>();
+    private List<Fragment> fragmentList = new ArrayList<Fragment>();
+
+    private List<GraphPhotoInfo> photos;
 
     public ImageViewFragmentAdapter(FragmentManager fm) {
         super(fm);
@@ -23,7 +25,15 @@ public class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
         for (GraphPhotoInfo p : photos) {
             fragmentList.add(ImageViewFragment.getInstance(p));
         }
+        this.photos = photos;
         notifyDataSetChanged();
+    }
+
+    public GraphPhotoInfo getPhoto(int pos) {
+        if (photos != null && photos.size() > pos) {
+            return photos.get(pos);
+        }
+        return null;
     }
 
     @Override

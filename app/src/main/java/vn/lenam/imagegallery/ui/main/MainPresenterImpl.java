@@ -13,6 +13,7 @@ import vn.lenam.imagegallery.api.OnRequestListCompleted;
 import vn.lenam.imagegallery.api.RequestApi;
 import vn.lenam.imagegallery.api.model.GraphAlbum;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.data.StoreBitmapService;
 import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 
 /**
@@ -22,6 +23,9 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
 
     @Inject
     RequestApi<GraphPhotoInfo> requestPhotos;
+
+    @Inject
+    StoreBitmapService storeBitmapService;
 
     private MainView mainView;
     private boolean isSessionOpened = false;
@@ -41,6 +45,22 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
     @Override
     public void onNeedLoadmore() {
         requestPhotos.loadmore();
+    }
+
+    @Override
+    public void shareBitmap(GraphPhotoInfo photo, MainView view) {
+        String file = storeBitmapService.save(photo);
+        if (file != null) {
+            view.sharePhoto(file);
+        }
+    }
+
+    @Override
+    public void saveBitmap(GraphPhotoInfo photo, MainView view) {
+        String file = storeBitmapService.save(photo);
+        if (file != null) {
+            view.savePhotoSuccess();
+        }
     }
 
     @Override

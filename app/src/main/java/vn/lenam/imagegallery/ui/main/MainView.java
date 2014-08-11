@@ -16,4 +16,8 @@ public interface MainView {
     void addPhotos(List<GraphPhotoInfo> photos);
 
     void clearPhotos();
+
+    void sharePhoto(String path);
+
+    void savePhotoSuccess();
 }

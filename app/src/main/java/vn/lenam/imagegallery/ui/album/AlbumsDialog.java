@@ -2,7 +2,6 @@ package vn.lenam.imagegallery.ui.album;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -18,7 +17,7 @@ import vn.lenam.imagegallery.api.model.GraphAlbum;
 /**
  * Created by Le Nam on 09-Aug-14.
  */
-public class AlbumsViewImpl extends AlertDialog implements AlbumsView, AdapterView.OnItemClickListener {
+public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener {
 
     @Inject
     AlbumsPresenter albumsPresenter;
@@ -27,24 +26,27 @@ public class AlbumsViewImpl extends AlertDialog implements AlbumsView, AdapterVi
     OnAlbumSelected onAlbumSelected;
 
     private AlbumsAdapter adapter;
+    private AlertDialog dialog;
 
-    public AlbumsViewImpl(Context context) {
-        super(context);
-        MPOFApp.get(getContext()).inject(this);
+    public AlbumsDialog(Context context) {
+        MPOFApp.get(context).inject(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Select album...");
+        View view = View.inflate(context, R.layout.popup_albums, null);
 
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.popup_albums);
-        ListView lstView = (ListView) findViewById(R.id.lst_main);
-        adapter = new AlbumsAdapter(getContext(), R.layout.item_album);
+        ListView lstView = (ListView) view.findViewById(R.id.lst_main);
+        adapter = new AlbumsAdapter(context, R.layout.item_album);
         lstView.setAdapter(adapter);
         lstView.setOnItemClickListener(this);
 
+        builder.setView(view);
+        dialog = builder.create();
+
         albumsPresenter.loadAlbums(this);
+    }
+
+    public void show() {
+        dialog.show();
     }
 
     @Override
@@ -58,6 +60,6 @@ public class AlbumsViewImpl extends AlertDialog implements AlbumsView, AdapterVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         onAlbumSelected.onSelected(adapter.getItem(position));
-        dismiss();
+        dialog.dismiss();
     }
 }

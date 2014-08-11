@@ -20,21 +20,41 @@
             android:layout_marginTop="30dp" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_albums"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Albums" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/ln_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_albums"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_album" />
+
+        <ImageButton
+            android:id="@+id/btn_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="2dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_share" />
+
+        <ImageButton
+            android:id="@+id/btn_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_toLeftOf="@id/btn_share"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_save" />
+    </RelativeLayout>
 </vn.lenam.imagegallery.ui.main.MainViewImpl>

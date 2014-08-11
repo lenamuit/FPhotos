@@ -1,4 +1,4 @@
-package vn.lenam.imagegallery.helper;
+package vn.lenam.imagegallery.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,7 +21,7 @@ import vn.lenam.imagegallery.BuildConfig;
 /**
  * Created by Le Nam on 11-Aug-14.
  */
-public class DiskLruImageCache implements ImageLoader.ImageCache {
+class DiskLruImageCache implements ImageLoader.ImageCache {
     private static final int APP_VERSION = 1;
     private static final int VALUE_COUNT = 1;
     private static int IO_BUFFER_SIZE = 8 * 1024;
@@ -69,6 +69,7 @@ public class DiskLruImageCache implements ImageLoader.ImageCache {
 
     @Override
     public void putBitmap(String key2, Bitmap data) {
+        Log.e("NamLH-putBitmap", key2);
         String key = createKey(key2);
         DiskLruCache.Editor editor = null;
         try {
@@ -105,6 +106,7 @@ public class DiskLruImageCache implements ImageLoader.ImageCache {
 
     @Override
     public Bitmap getBitmap(String key2) {
+        Log.e("NamLH-getBitmap", key2);
         String key = createKey(key2);
         Bitmap bitmap = null;
         DiskLruCache.Snapshot snapshot = null;

@@ -14,7 +14,6 @@ import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.api.model.GraphAlbum;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
-import vn.lenam.imagegallery.helper.DiskLruImageCache;
 
 /**
  * Created by namlh on 8/6/14.
@@ -46,8 +45,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public ImageLoader provideImageLoader(Application app, RequestQueue requestQueue) {
-        DiskLruImageCache mImageCache = new DiskLruImageCache(app);
-        return new ImageLoader(requestQueue, mImageCache);
+    public ImageLoader provideImageLoader(Application app, RequestQueue requestQueue, ImageLoader.ImageCache imageCache) {
+        return new ImageLoader(requestQueue, imageCache);
     }
 }

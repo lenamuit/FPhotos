@@ -9,9 +9,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.MPOFApp;
+import vn.lenam.imagegallery.ui.album.AlbumsDialog;
 import vn.lenam.imagegallery.ui.album.AlbumsPresenter;
 import vn.lenam.imagegallery.ui.album.AlbumsPresenterImpl;
-import vn.lenam.imagegallery.ui.album.AlbumsViewImpl;
 import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 import vn.lenam.imagegallery.ui.main.ImageViewFragment;
 import vn.lenam.imagegallery.ui.main.MainPresenter;
@@ -27,7 +27,7 @@ import vn.lenam.imagegallery.ui.main.MainViewImpl;
                 MainPresenterImpl.class,
                 ImageViewFragment.class,
                 AlbumsPresenterImpl.class,
-                AlbumsViewImpl.class},
+                AlbumsDialog.class},
         complete = false,
         library = true
 )

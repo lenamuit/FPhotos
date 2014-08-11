@@ -14,7 +14,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
-import vn.lenam.imagegallery.ui.album.AlbumsViewImpl;
+import vn.lenam.imagegallery.ui.album.AlbumsDialog;
 
 
 /**
@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity {
     @Inject
     Session.StatusCallback sessionStatusCallback;
 
-    private AlbumsViewImpl albumsView;
+    private AlbumsDialog albumsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +78,7 @@ public class MainActivity extends FragmentActivity {
     @OnClick(R.id.btn_albums)
     void showAblumPopup() {
         if (albumsView == null) {
-            albumsView = new AlbumsViewImpl(this);
+            albumsView = new AlbumsDialog(this);
         }
         albumsView.show();
     }
