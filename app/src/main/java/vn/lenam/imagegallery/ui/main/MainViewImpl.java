@@ -78,6 +78,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Override
     public void clearPhotos() {
+        viewPager.setCurrentItem(0);
         imageFragAdapter.clear();
     }
 
