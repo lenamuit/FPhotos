@@ -14,6 +14,7 @@ import vn.lenam.imagegallery.api.RequestApi;
 import vn.lenam.imagegallery.api.model.GraphAlbum;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 import vn.lenam.imagegallery.data.StoreBitmapService;
+import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 
 /**
@@ -32,8 +33,11 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
 
     @Override
     public void checkLoginStatus(MainView view) {
+        if (!isSessionOpened) {
+            isSessionOpened = Session.getActiveSession().isOpened();
+        }
         mainView = view;
-        Log.i("checkLoginStatus", "Session opened = " + isSessionOpened);
+        LogUtils.w("Session opened = " + isSessionOpened);
         if (isSessionOpened) {
             mainView.hideButtonFacebook();
             requestPhotos.request("me/photos", this);
@@ -70,6 +74,9 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
         if (state.isClosed()) {
             isSessionOpened = false;
         } else if (state.isOpened()) {
+            if (isSessionOpened) {
+                return;
+            }
             isSessionOpened = true;
         }
         if (mainView != null) {

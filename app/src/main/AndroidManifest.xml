@@ -15,7 +15,7 @@
         android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/app_id" />
+            android:value="\ ${facebookId}" />
 
         <activity
             android:name=".ui.MainActivity"

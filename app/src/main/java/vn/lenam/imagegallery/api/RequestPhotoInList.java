@@ -5,14 +5,23 @@ import android.util.Log;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 
+import javax.inject.Inject;
+
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.data.JsonCache;
 
 /**
  * Created by Le Nam on 08-Aug-14.
  */
 class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
+    static final String KEY_CACHE = "photo_in_list";
+    @Inject
+    JsonCache cache;
+
+    private int mCountLoadmore = 0;
 
     private OnRequestListCompleted<GraphPhotoInfo> onRequestPhotoCompleted;
     private Request request;
@@ -24,7 +33,14 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
 
     @Override
     public void onCompleted(Response response) {
-        GraphObjectList<GraphPhotoInfo> listPhoto = response.getGraphObject().getPropertyAsList("data", GraphPhotoInfo.class);
+        GraphObject object;
+        if (response.getGraphObject() != null) {
+            object = response.getGraphObject();
+            cache.save(KEY_CACHE, object.getInnerJSONObject(), mCountLoadmore);
+        } else {
+            object = GraphObject.Factory.create(cache.get(KEY_CACHE, mCountLoadmore));
+        }
+        GraphObjectList<GraphPhotoInfo> listPhoto = object.getPropertyAsList("data", GraphPhotoInfo.class);
         if (listPhoto != null) {
             onRequestPhotoCompleted.onCompleted(listPhoto);
             request = response.getRequestForPagedResults(Response.PagingDirection.NEXT);
@@ -51,6 +67,7 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
         if (request != null && hasChanged) {
             hasChanged = false;
             Request.executeBatchAsync(request);
+            mCountLoadmore++;
         }
     }
 }

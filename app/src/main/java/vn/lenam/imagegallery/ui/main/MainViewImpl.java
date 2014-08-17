@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -25,6 +24,7 @@ import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.helper.LogUtils;
 
 /**
  * Created by Le Nam on 08-Aug-14.
@@ -35,6 +35,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     LoginButton authButton;
     @InjectView(R.id.ln_login)
     View lnLogin;
+
+    @InjectView(R.id.ln_content)
+    View lnContent;
 
     @Inject
     MainPresenter presenter;
@@ -59,6 +62,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         //TODO need inject permission list
         authButton.setReadPermissions(Arrays.asList("email", "user_friends", "user_photos"));
         viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setOffscreenPageLimit(1);
         imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
         viewPager.setOnPageChangeListener(this);
@@ -67,14 +71,18 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Override
     public void hideButtonFacebook() {
-        if (lnLogin != null)
+        if (lnLogin != null) {
             lnLogin.setVisibility(View.GONE);
+            lnContent.setVisibility(VISIBLE);
+        }
     }
 
     @Override
     public void showButtonFacebook() {
-        if (lnLogin != null)
+        if (lnLogin != null) {
             lnLogin.setVisibility(View.VISIBLE);
+            lnContent.setVisibility(GONE);
+        }
     }
 
     @Override
@@ -90,7 +98,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Override
     public void sharePhoto(String path) {
-        Log.w("Share path", path);
+        LogUtils.w("Share path:" + path);
         Uri imageUri = Uri.parse("file://" + path);
 
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);

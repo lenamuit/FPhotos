@@ -69,7 +69,6 @@ class DiskLruImageCache implements ImageLoader.ImageCache {
 
     @Override
     public void putBitmap(String key2, Bitmap data) {
-        Log.e("NamLH-putBitmap", key2);
         String key = createKey(key2);
         DiskLruCache.Editor editor = null;
         try {
@@ -106,7 +105,6 @@ class DiskLruImageCache implements ImageLoader.ImageCache {
 
     @Override
     public Bitmap getBitmap(String key2) {
-        Log.e("NamLH-getBitmap", key2);
         String key = createKey(key2);
         Bitmap bitmap = null;
         DiskLruCache.Snapshot snapshot = null;

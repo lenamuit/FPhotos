@@ -21,6 +21,7 @@
 package vn.lenam.imagegallery;
 
 import android.app.Application;
+import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -52,6 +53,12 @@ public class AppModule {
     @Provides
     @Singleton
     public Application provideApplication() {
+        return app;
+    }
+
+    @Provides
+    @Singleton
+    public Context provideContext() {
         return app;
     }
 }

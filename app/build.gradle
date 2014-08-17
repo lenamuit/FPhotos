@@ -9,29 +9,40 @@ android {
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode 1
         versionName '1.0'
+
     }
-    buildTypes {
-        release {
-            runProguard false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+
     signingConfigs {
         debug {
             storeFile file(".android/debug.keystore")
         }
 
-        myConfig {
+        release {
             storeFile file(".android/lenam-android")
-//            storePassword "@Danthoira"
+            storePassword project.properties.storePassword
             keyAlias "webakit team"
-//            keyPassword "android"
+            keyPassword project.properties.aliasPassword
         }
     }
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
     productFlavors {
+        dev {
+            manifestPlaceholders = [facebookId: "348830125127212"]
+        }
+        real {
+            manifestPlaceholders = [facebookId: "527796837268425"]
+        }
     }
 }
 
@@ -47,4 +58,5 @@ dependencies {
     compile 'com.github.chrisbanes.photoview:library:1.2.3'
     compile 'com.mcxiaoke.volley:library:1.0.6'
     compile 'com.jakewharton:disklrucache:2.0.2'
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
 }
