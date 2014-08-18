@@ -39,6 +39,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @InjectView(R.id.ln_content)
     View lnContent;
 
+    @InjectView(R.id.tv_no_internet)
+    View tvNoInternet;
+
     @Inject
     MainPresenter presenter;
 
@@ -112,6 +115,16 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     public void savePhotoSuccess() {
         Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.msg_save_gallery), Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    @Override
+    public void showNoticeNoNetwork() {
+        tvNoInternet.setVisibility(VISIBLE);
+    }
+
+    @Override
+    public void hideNoticeNoNetwork() {
+        tvNoInternet.setVisibility(GONE);
     }
 
     @Override

@@ -20,4 +20,8 @@ public interface MainView {
     void sharePhoto(String path);
 
     void savePhotoSuccess();
+
+    void showNoticeNoNetwork();
+
+    void hideNoticeNoNetwork();
 }

@@ -3,6 +3,7 @@ package vn.lenam.imagegallery.ui.album;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -17,7 +18,7 @@ import vn.lenam.imagegallery.api.model.GraphAlbum;
 /**
  * Created by Le Nam on 09-Aug-14.
  */
-public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener {
+public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     @Inject
     AlbumsPresenter albumsPresenter;
@@ -38,6 +39,7 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
         adapter = new AlbumsAdapter(context, R.layout.item_album);
         lstView.setAdapter(adapter);
         lstView.setOnItemClickListener(this);
+        lstView.setOnScrollListener(this);
 
         builder.setView(view);
         dialog = builder.create();
@@ -61,5 +63,17 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         onAlbumSelected.onSelected(adapter.getItem(position));
         dialog.dismiss();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (firstVisibleItem + visibleItemCount > adapter.getCount() - 2) {
+            albumsPresenter.onNeedLoadmore();
+        }
     }
 }

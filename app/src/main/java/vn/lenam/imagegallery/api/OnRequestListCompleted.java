@@ -7,5 +7,5 @@ import java.util.List;
  */
 public interface OnRequestListCompleted<T> {
 
-    void onCompleted(List<T> photos);
+    void onCompleted(List<T> photos, boolean fromCache);
 }

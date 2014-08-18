@@ -25,7 +25,12 @@ public class AlbumsPresenterImpl implements AlbumsPresenter, OnRequestListComple
     }
 
     @Override
-    public void onCompleted(List<GraphAlbum> photos) {
+    public void onNeedLoadmore() {
+        requestAlbums.loadmore();
+    }
+
+    @Override
+    public void onCompleted(List<GraphAlbum> photos, boolean fromCache) {
         if (albumsView != null) {
             albumsView.addAlbums(photos);
         }

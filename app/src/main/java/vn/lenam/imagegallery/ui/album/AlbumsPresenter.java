@@ -6,4 +6,6 @@ package vn.lenam.imagegallery.ui.album;
 public interface AlbumsPresenter {
     void loadAlbums(AlbumsView albumsView);
 
+    void onNeedLoadmore();
+
 }

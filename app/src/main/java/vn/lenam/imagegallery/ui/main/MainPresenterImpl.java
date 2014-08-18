@@ -85,8 +85,13 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
     }
 
     @Override
-    public void onCompleted(List<GraphPhotoInfo> photos) {
+    public void onCompleted(List<GraphPhotoInfo> photos, boolean fromCache) {
         mainView.addPhotos(photos);
+        if (fromCache) {
+            mainView.showNoticeNoNetwork();
+        } else {
+            mainView.hideNoticeNoNetwork();
+        }
     }
 
     /**

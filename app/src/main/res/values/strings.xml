@@ -10,5 +10,6 @@
     <string name="num_photos">%d photos</string>
     <string name="msg_share_image">Share image...</string>
     <string name="msg_save_gallery">Save successful.</string>
+    <string name="text_no_internet">No internet connection</string>
 
 </resources>

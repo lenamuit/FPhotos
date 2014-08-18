@@ -48,8 +48,8 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
         //data available
         if (object != null) {
             GraphObjectList<GraphPhotoInfo> listPhoto = object.getPropertyAsList("data", GraphPhotoInfo.class);
-
-            onRequestPhotoCompleted.onCompleted(listPhoto);
+            boolean fromCache = !isOnline;
+            onRequestPhotoCompleted.onCompleted(listPhoto, fromCache);
             //if online >> request for new page
             if (isOnline) {
                 request = response.getRequestForPagedResults(Response.PagingDirection.NEXT);
@@ -95,7 +95,7 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
                 GraphObject object = GraphObject.Factory.create(jsonObject);
                 if (object != null && object.getProperty("data") != null) {
                     GraphObjectList<GraphPhotoInfo> listPhoto = object.getPropertyAsList("data", GraphPhotoInfo.class);
-                    onRequestPhotoCompleted.onCompleted(listPhoto);
+                    onRequestPhotoCompleted.onCompleted(listPhoto, true);
                     canLoadMore = true;
                 }
             }
