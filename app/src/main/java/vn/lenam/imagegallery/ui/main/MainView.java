@@ -24,4 +24,5 @@ public interface MainView {
     void showNoticeNoNetwork();
 
     void hideNoticeNoNetwork();
+
 }

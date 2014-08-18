@@ -23,6 +23,7 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
 
     private int currentPage = 0;
     private boolean canLoadMore = true;
+    private String keyCache;
 
     private OnRequestListCompleted<GraphPhotoInfo> onRequestPhotoCompleted;
     private Request request;
@@ -37,10 +38,10 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
         boolean isOnline = true;
         if (response.getGraphObject() != null) {
             object = response.getGraphObject();
-            cache.save(KEY_CACHE, object.getInnerJSONObject(), currentPage);
+            cache.save(keyCache, object.getInnerJSONObject(), currentPage);
         } else {
             isOnline = false;
-            JSONObject jsonObject = cache.get(KEY_CACHE, currentPage);
+            JSONObject jsonObject = cache.get(keyCache, currentPage);
             if (jsonObject != null) {
                 object = GraphObject.Factory.create(jsonObject);
             }
@@ -68,6 +69,7 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
 
     @Override
     public void request(String path, OnRequestListCompleted<GraphPhotoInfo> callback) {
+        this.keyCache = KEY_CACHE + path.replace("/", "_");
         Session session = Session.getActiveSession();
         this.onRequestPhotoCompleted = callback;
         currentPage = 0;
@@ -90,7 +92,7 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
         }
         //when offline, cache available or not
         else {
-            JSONObject jsonObject = cache.get(KEY_CACHE, currentPage);
+            JSONObject jsonObject = cache.get(keyCache, currentPage);
             if (jsonObject != null) {
                 GraphObject object = GraphObject.Factory.create(jsonObject);
                 if (object != null && object.getProperty("data") != null) {

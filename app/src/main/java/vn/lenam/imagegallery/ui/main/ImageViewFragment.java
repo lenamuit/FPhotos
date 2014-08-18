@@ -12,6 +12,8 @@ import com.android.volley.toolbox.ImageLoader;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
@@ -27,7 +29,11 @@ public class ImageViewFragment extends Fragment {
     @Inject
     ImageLoader imageLoader;
 
-    private ImageView imageView;
+    @InjectView(R.id.imgView)
+    ImageView imageView;
+
+    @InjectView(R.id.img_noimage)
+    View noImage;
 
     public static ImageViewFragment getInstance(GraphPhotoInfo url) {
         ImageViewFragment fragment = new ImageViewFragment();
@@ -41,7 +47,7 @@ public class ImageViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MPOFApp.get(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.imageview_fragment, null);
-        imageView = (ImageView) view.findViewById(R.id.imgView);
+        ButterKnife.inject(this, view);
         String url = getArguments().getString(KEY_URL);
         imageLoader.get(url, new ImageLoader.ImageListener() {
             @Override
@@ -49,11 +55,12 @@ public class ImageViewFragment extends Fragment {
                 PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
                 imageView.setImageBitmap(response.getBitmap());
                 mAttacher.update();
+                noImage.setVisibility(View.GONE);
             }
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                imageView.setImageResource(R.drawable.noimage);
+                noImage.setVisibility(View.VISIBLE);
             }
         });
 

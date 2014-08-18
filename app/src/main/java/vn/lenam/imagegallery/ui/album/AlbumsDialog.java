@@ -14,6 +14,9 @@ import javax.inject.Inject;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.api.model.GraphAlbum;
+import vn.lenam.imagegallery.data.JsonCache;
+import vn.lenam.imagegallery.helper.NetworkHelper;
+import vn.lenam.imagegallery.helper.ToastUtils;
 
 /**
  * Created by Le Nam on 09-Aug-14.
@@ -26,10 +29,16 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
     @Inject
     OnAlbumSelected onAlbumSelected;
 
+
+    @Inject
+    JsonCache jsonCache;
+
     private AlbumsAdapter adapter;
     private AlertDialog dialog;
+    private Context context;
 
     public AlbumsDialog(Context context) {
+        this.context = context;
         MPOFApp.get(context).inject(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Select album...");
@@ -61,8 +70,19 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        onAlbumSelected.onSelected(adapter.getItem(position));
-        dialog.dismiss();
+        GraphAlbum album = adapter.getItem(position);
+        String path = album.getId() + "_photos";
+        if (album.getCount() > 0) {
+            if (NetworkHelper.isConnected(context) || jsonCache.get("photo_in_list" + path, 0) != null) {
+                onAlbumSelected.onSelected(adapter.getItem(position));
+                dialog.dismiss();
+            } else {
+                ToastUtils.showToast(context, R.string.msg_no_photos_in_cache);
+            }
+        } else {
+            ToastUtils.showToast(context, R.string.msg_select_album_no_photo);
+        }
+
     }
 
     @Override

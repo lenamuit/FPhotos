@@ -28,6 +28,7 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
     @Inject
     StoreBitmapService storeBitmapService;
 
+
     private MainView mainView;
     private boolean isSessionOpened = false;
 
@@ -102,8 +103,9 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
     @Override
     public void onSelected(GraphAlbum album) {
         Log.e("Namlh", "select album " + album.getName());
-        mainView.clearPhotos();
-        requestPhotos.request(album.getId() + "/photos", this);
+        String path = album.getId() + "/photos";
 
+        mainView.clearPhotos();
+        requestPhotos.request(path, this);
     }
 }

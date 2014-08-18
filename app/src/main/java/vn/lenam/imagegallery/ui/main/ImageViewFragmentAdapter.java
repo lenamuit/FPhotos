@@ -19,13 +19,15 @@ public class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
 
     public ImageViewFragmentAdapter(FragmentManager fm) {
         super(fm);
+        photos = new ArrayList<GraphPhotoInfo>();
     }
 
     public void addPhotos(List<GraphPhotoInfo> photos) {
         for (GraphPhotoInfo p : photos) {
             fragmentList.add(ImageViewFragment.getInstance(p));
+            this.photos.add(p);
         }
-        this.photos = photos;
+//        this.photos = photos;
         notifyDataSetChanged();
     }
 
@@ -52,6 +54,7 @@ public class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
     }
 
     public void clear() {
+        photos.clear();
         fragmentList.clear();
         notifyDataSetChanged();
     }
