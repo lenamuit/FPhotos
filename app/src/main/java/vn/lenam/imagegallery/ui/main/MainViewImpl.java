@@ -1,5 +1,6 @@
 package vn.lenam.imagegallery.ui.main;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -49,6 +50,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     FragmentManager fragmentManager;
     private ImageViewFragmentAdapter imageFragAdapter;
     private ViewPager viewPager;
+    private ProgressDialog progressDialog;
 
     public MainViewImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -101,6 +103,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Override
     public void sharePhoto(String path) {
+        hideProgressDialog();
         LogUtils.w("Share path:" + path);
         Uri imageUri = Uri.parse("file://" + path);
 
@@ -146,7 +149,18 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @OnClick(R.id.btn_share)
     void shareBitmap() {
+        showProgressDialog();
         int pos = viewPager.getCurrentItem();
         presenter.shareBitmap(imageFragAdapter.getPhoto(pos), this);
+
+    }
+
+    private void showProgressDialog() {
+        progressDialog = ProgressDialog.show(getContext(), "Share photo", "Loading...");
+        progressDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        progressDialog.dismiss();
     }
 }
