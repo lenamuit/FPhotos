@@ -122,6 +122,8 @@ class DiskLruImageCache implements ImageLoader.ImageCache {
             }
         } catch (IOException e) {
             Log.e("ImageCache", "IOException", e);
+        } catch (OutOfMemoryError e) {
+            Log.e("ImageCache", "OutOfMemoryError", e);
         } finally {
             if (snapshot != null) {
                 snapshot.close();

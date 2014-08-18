@@ -45,12 +45,14 @@ public class JsonCache {
     public void save(String key, JSONObject json, int index) {
         DiskLruCache.Editor editor = null;
         try {
-            editor = cache.edit(key);
+            editor = cache.edit(key + "_" + index);
             if (editor == null) {
                 return;
             }
             String s = json.toString();
-            editor.set(index, s);
+            editor.set(0, s);
+            LogUtils.w("cache index: " + index);
+            LogUtils.w("cache: " + s);
             editor.commit();
         } catch (IOException e) {
             if (BuildConfig.DEBUG) {
@@ -71,8 +73,10 @@ public class JsonCache {
 
     public JSONObject get(String key, int index) {
         try {
-            String s = cache.get(key).getString(index);
+            LogUtils.w("load index: " + index);
+            String s = cache.get(key + "_" + index).getString(0);
             JSONObject json = new JSONObject(s);
+            LogUtils.w("load cache: " + json.toString());
             return json;
         } catch (Exception e) {
             LogUtils.e("error", e);

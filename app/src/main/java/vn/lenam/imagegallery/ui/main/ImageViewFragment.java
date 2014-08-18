@@ -62,7 +62,6 @@ public class ImageViewFragment extends Fragment {
 
     @Override
     public void onPause() {
-//        picasso.cancelRequest(imageView);
         super.onPause();
     }
 }

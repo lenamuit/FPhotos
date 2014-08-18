@@ -33,7 +33,7 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
 
     @Override
     public void checkLoginStatus(MainView view) {
-        if (!isSessionOpened) {
+        if (!isSessionOpened && Session.getActiveSession() != null) {
             isSessionOpened = Session.getActiveSession().isOpened();
         }
         mainView = view;
