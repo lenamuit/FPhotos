@@ -11,10 +11,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.ui.album.AlbumsDialog;
+import vn.lenam.imagegallery.ui.main.MainViewImpl;
 
 
 /**
@@ -26,7 +28,8 @@ public class MainActivity extends FragmentActivity {
     UiLifecycleHelper uiHelper;
     @Inject
     Session.StatusCallback sessionStatusCallback;
-
+    @InjectView(R.id.container)
+    MainViewImpl container;
     private AlbumsDialog albumsView;
 
     @Override
@@ -81,5 +84,13 @@ public class MainActivity extends FragmentActivity {
             albumsView = new AlbumsDialog(this);
         }
         albumsView.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (container.onBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
     }
 }

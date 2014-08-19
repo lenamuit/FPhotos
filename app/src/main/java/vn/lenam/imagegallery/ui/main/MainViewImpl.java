@@ -3,13 +3,18 @@ package vn.lenam.imagegallery.ui.main;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.widget.LoginButton;
@@ -43,20 +48,21 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @InjectView(R.id.tv_no_internet)
     View tvNoInternet;
 
+    @InjectView(R.id.btn_info)
+    View btnInfo;
+
     @Inject
     MainPresenter presenter;
-
-
     FragmentManager fragmentManager;
+    private PhotoInfoPopupWindow photoInfoPopupWindow;
     private ImageViewFragmentAdapter imageFragAdapter;
     private ViewPager viewPager;
     private ProgressDialog progressDialog;
-
     public MainViewImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
         MPOFApp.get(context).inject(this);
         fragmentManager = ((FragmentActivity) context).getSupportFragmentManager();
-
+        photoInfoPopupWindow = new PhotoInfoPopupWindow(context);
     }
 
     @Override
@@ -155,6 +161,15 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     }
 
+    @OnClick(R.id.btn_info)
+    void showInfo() {
+        photoInfoPopupWindow.show(btnInfo, imageFragAdapter.getPhoto(viewPager.getCurrentItem()));
+    }
+
+    public boolean onBackPressed() {
+        return photoInfoPopupWindow.dismiss();
+    }
+
     private void showProgressDialog() {
         progressDialog = ProgressDialog.show(getContext(), "Share photo", "Loading...");
         progressDialog.show();
@@ -162,5 +177,53 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     private void hideProgressDialog() {
         progressDialog.dismiss();
+    }
+
+    static class PhotoInfoPopupWindow {
+
+        private final PopupWindow popupWindow;
+        private final View popupView;
+        @InjectView(R.id.tv_uploaded_by)
+        TextView tvUploaded;
+        @InjectView(R.id.tv_at_time)
+        TextView tvAtTime;
+        @InjectView(R.id.tv_who_in_photo)
+        TextView tvWhoInPhoto;
+        @InjectView(R.id.tv_place)
+        TextView tvPlace;
+        private Context context;
+
+        public PhotoInfoPopupWindow(Context context) {
+            this.context = context;
+            popupView = View.inflate(context, R.layout.popup_photo_info, null);
+            popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindow.setOutsideTouchable(true);
+            popupWindow.setBackgroundDrawable(new ColorDrawable());
+            popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                        popupWindow.dismiss();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            ButterKnife.inject(this, popupView);
+        }
+
+        public void show(View view, GraphPhotoInfo photo) {
+            tvUploaded.setText(photo.getFrom().getName());
+//            tvAtTime.setText(photo.get);
+//            tvPlace.setText(photo.get);
+            popupWindow.showAsDropDown(view, 0, -context.getResources().getDimensionPixelSize(R.dimen.photo_popup_height));
+        }
+
+        public boolean dismiss() {
+            if (popupWindow.isShowing()) {
+                popupWindow.dismiss();
+                return true;
+            }
+            return false;
+        }
     }
 }
