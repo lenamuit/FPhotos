@@ -30,6 +30,7 @@ import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.helper.DateTimeHelper;
 import vn.lenam.imagegallery.helper.LogUtils;
 
 /**
@@ -179,6 +180,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         progressDialog.dismiss();
     }
 
+    /**
+     * Class for show popup detail photo
+     */
     static class PhotoInfoPopupWindow {
 
         private final PopupWindow popupWindow;
@@ -187,11 +191,11 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         TextView tvUploaded;
         @InjectView(R.id.tv_at_time)
         TextView tvAtTime;
-        @InjectView(R.id.tv_who_in_photo)
-        TextView tvWhoInPhoto;
         @InjectView(R.id.tv_place)
         TextView tvPlace;
         private Context context;
+
+        private View achor;
 
         public PhotoInfoPopupWindow(Context context) {
             this.context = context;
@@ -202,8 +206,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
             popupWindow.setTouchInterceptor(new View.OnTouchListener() {
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                        popupWindow.dismiss();
-                        return true;
+                        return dismiss();
                     }
                     return false;
                 }
@@ -213,13 +216,23 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
         public void show(View view, GraphPhotoInfo photo) {
             tvUploaded.setText(photo.getFrom().getName());
-//            tvAtTime.setText(photo.get);
-//            tvPlace.setText(photo.get);
-            popupWindow.showAsDropDown(view, 0, -context.getResources().getDimensionPixelSize(R.dimen.photo_popup_height));
+            String date = DateTimeHelper.getStringDate(context, DateTimeHelper.getDateFromISO8601(photo.getCreatedTime()));
+            tvAtTime.setText(date);
+            if (photo.getPlace() != null) {
+                tvPlace.setText(photo.getPlace().getName());
+            } else {
+                tvPlace.setText("Unknown");
+            }
+            achor = view;
+            popupWindow.showAsDropDown(view, 0, -context.getResources().getDimensionPixelOffset(R.dimen.photo_popup_height));
+            achor.setVisibility(GONE);
         }
 
         public boolean dismiss() {
             if (popupWindow.isShowing()) {
+                if (achor != null) {
+                    achor.setVisibility(VISIBLE);
+                }
                 popupWindow.dismiss();
                 return true;
             }

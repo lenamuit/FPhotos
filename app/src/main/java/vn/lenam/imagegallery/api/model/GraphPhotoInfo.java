@@ -1,5 +1,6 @@
 package vn.lenam.imagegallery.api.model;
 
+import com.facebook.model.GraphPlace;
 import com.facebook.model.GraphUser;
 
 import java.util.List;
@@ -19,4 +20,9 @@ public interface GraphPhotoInfo extends GraphPhoto {
     List<GraphPhoto> getImages();
 
     String getLink();
+
+    String getCreatedTime();
+
+    GraphPlace getPlace();
+
 }
