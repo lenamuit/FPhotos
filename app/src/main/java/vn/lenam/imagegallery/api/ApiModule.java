@@ -23,8 +23,9 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
  * Created by namlh on 8/6/14.
  */
 @Module(
-        injects = {RequestAlbumInList.class
-                , RequestPhotoInList.class},
+        injects = {RequestAlbumInList.class,
+                RequestPhotoInList.class,
+                RequestImageFile.class},
         complete = false,
         library = true
 )
@@ -33,7 +34,7 @@ public class ApiModule {
     @Provides
     @Singleton
     public RequestApi<List<GraphPhotoInfo>> provideRequestPhoto(Context context) {
-        RequestPhotoInList request = (RequestPhotoInList) RequestPhotoInList.getInstance();
+        RequestPhotoInList request = new RequestPhotoInList();
         MPOFApp.get(context).inject(request);
         return request;
     }
@@ -41,10 +42,19 @@ public class ApiModule {
     @Provides
     @Singleton
     public RequestApi<List<GraphAlbum>> provideRequestAlbums(Context context) {
-        RequestAlbumInList requestAlbumInList = (RequestAlbumInList) RequestAlbumInList.getInstance();
+        RequestAlbumInList requestAlbumInList = new RequestAlbumInList();
         MPOFApp.get(context).inject(requestAlbumInList);
         return requestAlbumInList;
     }
+
+    @Provides
+    @Singleton
+    public RequestApi<String> provideRequestImageFile(Context context) {
+        RequestImageFile requestImageFile = new RequestImageFile();
+        MPOFApp.get(context).inject(requestImageFile);
+        return requestImageFile;
+    }
+
 
     @Provides
     @Singleton

@@ -5,5 +5,6 @@ package vn.lenam.imagegallery.api;
  */
 public interface OnRequestApiCompleted<T> {
 
-    void onCompleted(T photos, boolean fromCache);
+    void onCompleted(T object, boolean fromCache);
+
 }

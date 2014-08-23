@@ -18,7 +18,7 @@ import vn.lenam.imagegallery.data.JsonCache;
 /**
  * Created by namlh on 8/9/14.
  */
-class RequestAlbumInList implements RequestApi<List<GraphAlbum>> {
+class RequestAlbumInList implements RequestApi<List<GraphAlbum>>, Request.Callback {
     static final String KEY_CACHE = "album_in_list";
 
     @Inject
@@ -28,10 +28,6 @@ class RequestAlbumInList implements RequestApi<List<GraphAlbum>> {
     private Request request;
     private boolean canLoadmore = false;
     private int currentPage = 0;
-
-    public static RequestApi<List<GraphAlbum>> getInstance() {
-        return new RequestAlbumInList();
-    }
 
     @Override
     public void request(String path, OnRequestApiCompleted<List<GraphAlbum>> callback) {

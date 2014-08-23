@@ -18,7 +18,7 @@ import vn.lenam.imagegallery.data.JsonCache;
 /**
  * Created by Le Nam on 08-Aug-14.
  */
-class RequestPhotoInList implements RequestApi<List<GraphPhotoInfo>> {
+class RequestPhotoInList implements RequestApi<List<GraphPhotoInfo>>, Request.Callback {
     static final String KEY_CACHE = "photo_in_list";
     @Inject
     JsonCache cache;
@@ -29,10 +29,6 @@ class RequestPhotoInList implements RequestApi<List<GraphPhotoInfo>> {
 
     private OnRequestApiCompleted<List<GraphPhotoInfo>> onRequestPhotoCompleted;
     private Request request;
-
-    public static RequestApi<List<GraphPhotoInfo>> getInstance() {
-        return new RequestPhotoInList();
-    }
 
     @Override
     public void onCompleted(Response response) {
