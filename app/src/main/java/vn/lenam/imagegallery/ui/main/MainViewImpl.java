@@ -2,9 +2,7 @@ package vn.lenam.imagegallery.ui.main;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -15,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.widget.LoginButton;
 
@@ -31,7 +28,7 @@ import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 import vn.lenam.imagegallery.helper.DateTimeHelper;
-import vn.lenam.imagegallery.helper.LogUtils;
+import vn.lenam.imagegallery.ui.share.ShareHandler;
 
 /**
  * Created by Le Nam on 08-Aug-14.
@@ -57,11 +54,15 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Inject
     MainPresenter presenter;
+    @Inject
+    ShareHandler shareHandler;
+
     FragmentManager fragmentManager;
     private PhotoInfoPopupWindow photoInfoPopupWindow;
     private ImageViewFragmentAdapter imageFragAdapter;
     private ViewPager viewPager;
     private ProgressDialog progressDialog;
+
     public MainViewImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
         MPOFApp.get(context).inject(this);
@@ -120,26 +121,6 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     }
 
     @Override
-
-    public void sharePhoto(String path) {
-        hideProgressDialog();
-        LogUtils.w("Share path:" + path);
-        Uri imageUri = Uri.parse("file://" + path);
-
-        Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-        sharingIntent.setType("image/png");
-        getContext().startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.msg_share_image)));
-    }
-
-    @Override
-    public void savePhotoSuccess() {
-        Toast toast = Toast.makeText(getContext(), getResources().getString(R.string.msg_save_gallery), Toast.LENGTH_LONG);
-        toast.show();
-    }
-
-    @Override
     public void showNoticeNoNetwork() {
         tvNoInternet.setVisibility(VISIBLE);
     }
@@ -168,9 +149,8 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @OnClick(R.id.btn_share)
     void shareBitmap() {
-        showProgressDialog();
         int pos = viewPager.getCurrentItem();
-        presenter.shareBitmap(imageFragAdapter.getPhoto(pos), this);
+        shareHandler.startShareSns(getContext(), imageFragAdapter.getPhoto(pos));
 
     }
 
@@ -183,11 +163,6 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     public boolean onBackPressed() {
         return photoInfoPopupWindow.dismiss();
-    }
-
-    private void showProgressDialog() {
-        progressDialog = ProgressDialog.show(getContext(), getContext().getString(R.string.share_photo), getContext().getString(R.string.loading));
-        progressDialog.show();
     }
 
     private void hideProgressDialog() {

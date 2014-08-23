@@ -22,7 +22,7 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 /**
  * Created by Le Nam on 07-Aug-14.
  */
-public class ImageViewFragment extends Fragment {
+class ImageViewFragment extends Fragment {
 
     private static final String KEY_URL = "key_url";
 

@@ -14,7 +14,7 @@ import vn.lenam.imagegallery.api.model.GraphAlbum;
 /**
  * Created by Le Nam on 09-Aug-14.
  */
-public class AlbumsAdapter extends ArrayAdapter<GraphAlbum> {
+class AlbumsAdapter extends ArrayAdapter<GraphAlbum> {
 
     public AlbumsAdapter(Context context, int resource) {
         super(context, resource);

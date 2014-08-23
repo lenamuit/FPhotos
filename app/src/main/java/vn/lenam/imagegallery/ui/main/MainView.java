@@ -17,10 +17,6 @@ public interface MainView {
 
     void clearPhotos();
 
-    void sharePhoto(String path);
-
-    void savePhotoSuccess();
-
     void showNoticeNoNetwork();
 
     void hideNoticeNoNetwork();

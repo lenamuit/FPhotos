@@ -29,16 +29,22 @@ import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.api.ApiModule;
 import vn.lenam.imagegallery.data.DataModule;
-import vn.lenam.imagegallery.ui.UiModule;
+import vn.lenam.imagegallery.ui.MainActivity;
+import vn.lenam.imagegallery.ui.album.AlbumModule;
+import vn.lenam.imagegallery.ui.main.MainModule;
+import vn.lenam.imagegallery.ui.share.ShareModule;
 
 @Module(
         injects = {
-                MPOFApp.class
+                MPOFApp.class,
+                MainActivity.class
         },
         includes = {
                 DataModule.class,
                 ApiModule.class,
-                UiModule.class
+                ShareModule.class,
+                MainModule.class,
+                AlbumModule.class
         }
 )
 public class AppModule {

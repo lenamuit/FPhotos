@@ -11,7 +11,7 @@ import vn.lenam.imagegallery.api.model.GraphAlbum;
 /**
  * Created by Le Nam on 09-Aug-14.
  */
-public class AlbumsPresenterImpl implements AlbumsPresenter, OnRequestApiCompleted<List<GraphAlbum>> {
+class AlbumsPresenterImpl implements AlbumsPresenter, OnRequestApiCompleted<List<GraphAlbum>> {
 
     @Inject
     RequestApi<List<GraphAlbum>> requestAlbums;

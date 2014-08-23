@@ -12,7 +12,7 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 /**
  * Created by Le Nam on 07-Aug-14.
  */
-public class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
+class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
 
     private List<GraphPhotoInfo> photos;

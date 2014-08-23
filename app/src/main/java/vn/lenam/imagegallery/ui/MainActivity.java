@@ -28,8 +28,10 @@ public class MainActivity extends FragmentActivity {
     UiLifecycleHelper uiHelper;
     @Inject
     Session.StatusCallback sessionStatusCallback;
+
     @InjectView(R.id.container)
     MainViewImpl container;
+
     private AlbumsDialog albumsView;
 
     @Override

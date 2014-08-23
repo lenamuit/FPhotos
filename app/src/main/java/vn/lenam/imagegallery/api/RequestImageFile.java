@@ -63,9 +63,13 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
      * @return
      */
     private String getFileName(String url) {
-        String[] urls = url.split("//");
+        String[] urls = url.split("/");
         String name = urls[urls.length - 1];
         if (name.contains(".jpg")) {
+            int index = name.indexOf('?');
+            if (index >= 0) {
+                return name.substring(0, index);
+            }
             return name;
         }
         return null;

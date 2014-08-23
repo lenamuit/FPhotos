@@ -18,7 +18,7 @@ import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 /**
  * Created by namlh on 8/7/14.
  */
-public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestApiCompleted<List<GraphPhotoInfo>>, OnAlbumSelected {
+class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestApiCompleted<List<GraphPhotoInfo>>, OnAlbumSelected {
 
     @Inject
     RequestApi<List<GraphPhotoInfo>> requestPhotos;
@@ -48,22 +48,6 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
     @Override
     public void onNeedLoadmore() {
         requestPhotos.loadmore();
-    }
-
-    @Override
-    public void shareBitmap(GraphPhotoInfo photo, MainView view) {
-        String file = storeBitmapService.save(photo);
-        if (file != null) {
-            view.sharePhoto(file);
-        }
-    }
-
-    @Override
-    public void saveBitmap(GraphPhotoInfo photo, MainView view) {
-        String file = storeBitmapService.save(photo);
-        if (file != null) {
-            view.savePhotoSuccess();
-        }
     }
 
     @Override
