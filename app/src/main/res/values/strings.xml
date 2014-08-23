@@ -9,7 +9,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="num_photos">%d photos</string>
     <string name="msg_share_image">Share image…</string>
-    <string name="msg_save_gallery">Save successful.</string>
+    <string name="msg_save_gallery">Saved successful.</string>
     <string name="text_no_internet">No internet connection</string>
     <string name="msg_no_photos_in_cache">No photo in memory. Please check internet connection and try again.</string>
     <string name="msg_select_album_no_photo">This album don\'t have any photos. Please select another albums.</string>
@@ -17,6 +17,7 @@
     <string name="select_album">Select album…</string>
     <string name="share_photo">Share photo</string>
     <string name="no_photo_found">No photo found.</string>
-    <string name="loading_photo_you_are_tagged_in">Loading photos you are tagged in...</string>
+    <string name="loading_photo_you_are_tagged_in">Loading photos you are tagged in…</string>
+    <string name="msg_confirm_open_photo">Do you want to open saved photo?</string>
 
 </resources>

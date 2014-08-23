@@ -149,8 +149,10 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @OnClick(R.id.btn_share)
     void shareBitmap() {
-        int pos = viewPager.getCurrentItem();
-        shareHandler.startShareSns(getContext(), imageFragAdapter.getPhoto(pos));
+        if (imageFragAdapter.getCount() > 0) {
+            int pos = viewPager.getCurrentItem();
+            shareHandler.startShareSns(getContext(), imageFragAdapter.getPhoto(pos));
+        }
 
     }
 
@@ -163,8 +165,10 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @OnClick(R.id.btn_save)
     void saveBitmap() {
-        int pos = viewPager.getCurrentItem();
-        shareHandler.startSaveGallery(getContext(), imageFragAdapter.getPhoto(pos));
+        if (imageFragAdapter.getCount() > 0) {
+            int pos = viewPager.getCurrentItem();
+            shareHandler.startSaveGallery(getContext(), imageFragAdapter.getPhoto(pos));
+        }
     }
 
     public boolean onBackPressed() {
@@ -188,6 +192,8 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         TextView tvAtTime;
         @InjectView(R.id.tv_place)
         TextView tvPlace;
+        @InjectView(R.id.tv_title)
+        TextView tvTitle;
         private Context context;
 
         private View achor;
@@ -213,6 +219,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
             tvUploaded.setText(photo.getFrom().getName());
             String date = DateTimeHelper.getStringDate(context, DateTimeHelper.getDateFromISO8601(photo.getCreatedTime()));
             tvAtTime.setText(date);
+            tvTitle.setText(photo.getName());
             if (photo.getPlace() != null) {
                 tvPlace.setText(photo.getPlace().getName());
             } else {
