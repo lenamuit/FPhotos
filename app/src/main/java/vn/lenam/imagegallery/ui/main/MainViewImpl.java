@@ -52,6 +52,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @InjectView(R.id.btn_info)
     View btnInfo;
 
+    @InjectView(R.id.tv_message)
+    TextView tvMessage;
+
     @Inject
     MainPresenter presenter;
     FragmentManager fragmentManager;
@@ -72,13 +75,14 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
         ButterKnife.inject(this);
         //TODO need inject permission list
-        authButton.setReadPermissions(Arrays.asList("email", "user_friends", "user_photos"));
+        authButton.setReadPermissions(Arrays.asList("email", "user_photos"));
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setOffscreenPageLimit(1);
         imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
         viewPager.setOnPageChangeListener(this);
         presenter.checkLoginStatus(this);
+        tvMessage.setText(getContext().getString(R.string.loading_photo_you_are_tagged_in));
     }
 
     @Override
@@ -99,7 +103,14 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Override
     public void addPhotos(List<GraphPhotoInfo> photos) {
-        imageFragAdapter.addPhotos(photos);
+        if (photos.size() == 0 && imageFragAdapter.getCount() == 0) {
+            tvMessage.setVisibility(VISIBLE);
+            tvMessage.setText(getContext().getString(R.string.no_photo_found));
+        } else {
+            tvMessage.setVisibility(GONE);
+            imageFragAdapter.addPhotos(photos);
+        }
+
     }
 
     @Override
@@ -109,6 +120,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     }
 
     @Override
+
     public void sharePhoto(String path) {
         hideProgressDialog();
         LogUtils.w("Share path:" + path);
@@ -164,7 +176,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @OnClick(R.id.btn_info)
     void showInfo() {
-        photoInfoPopupWindow.show(btnInfo, imageFragAdapter.getPhoto(viewPager.getCurrentItem()));
+        if (imageFragAdapter.getCount() > 0) {
+            photoInfoPopupWindow.show(btnInfo, imageFragAdapter.getPhoto(viewPager.getCurrentItem()));
+        }
     }
 
     public boolean onBackPressed() {
@@ -172,7 +186,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     }
 
     private void showProgressDialog() {
-        progressDialog = ProgressDialog.show(getContext(), "Share photo", "Loading...");
+        progressDialog = ProgressDialog.show(getContext(), getContext().getString(R.string.share_photo), getContext().getString(R.string.loading));
         progressDialog.show();
     }
 

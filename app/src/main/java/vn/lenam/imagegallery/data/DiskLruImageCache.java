@@ -3,7 +3,6 @@ package vn.lenam.imagegallery.data;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.jakewharton.disklrucache.DiskLruCache;
@@ -17,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import vn.lenam.imagegallery.BuildConfig;
+import vn.lenam.imagegallery.helper.LogUtils;
 
 /**
  * Created by Le Nam on 11-Aug-14.
@@ -81,17 +81,17 @@ class DiskLruImageCache implements ImageLoader.ImageCache {
                 mDiskCache.flush();
                 editor.commit();
                 if (BuildConfig.DEBUG) {
-                    Log.d("cache_test_DISK_", "image put on disk cache " + key);
+                    LogUtils.d("cache_test_DISK_", "image put on disk cache " + key);
                 }
             } else {
                 editor.abort();
                 if (BuildConfig.DEBUG) {
-                    Log.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
+                    LogUtils.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
                 }
             }
         } catch (IOException e) {
             if (BuildConfig.DEBUG) {
-                Log.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
+                LogUtils.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
             }
             try {
                 if (editor != null) {
@@ -121,9 +121,9 @@ class DiskLruImageCache implements ImageLoader.ImageCache {
                 bitmap = BitmapFactory.decodeStream(buffIn);
             }
         } catch (IOException e) {
-            Log.e("ImageCache", "IOException", e);
+            LogUtils.e("ImageCache", "IOException", e);
         } catch (OutOfMemoryError e) {
-            Log.e("ImageCache", "OutOfMemoryError", e);
+            LogUtils.e("ImageCache", "OutOfMemoryError", e);
         } finally {
             if (snapshot != null) {
                 snapshot.close();
@@ -131,7 +131,7 @@ class DiskLruImageCache implements ImageLoader.ImageCache {
         }
 
         if (BuildConfig.DEBUG) {
-            Log.d("cache_test_DISK_", bitmap == null ? "" : "image read from disk " + key);
+            LogUtils.d("cache_test_DISK_", bitmap == null ? "" : "image read from disk " + key);
         }
 
         return bitmap;
@@ -159,7 +159,7 @@ class DiskLruImageCache implements ImageLoader.ImageCache {
 
     public void clearCache() {
         if (BuildConfig.DEBUG) {
-            Log.d("cache_test_DISK_", "disk cache CLEARED");
+            LogUtils.d("cache_test_DISK_", "disk cache CLEARED");
         }
         try {
             mDiskCache.delete();

@@ -38,7 +38,7 @@ public class ImageViewFragment extends Fragment {
     public static ImageViewFragment getInstance(GraphPhotoInfo url) {
         ImageViewFragment fragment = new ImageViewFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_URL, url.getImages().get(1).getSource());
+        bundle.putString(KEY_URL, url.getSource());
         fragment.setArguments(bundle);
         return fragment;
     }

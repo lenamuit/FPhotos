@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.api.model.GraphAlbum;
@@ -33,6 +35,12 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
     @Inject
     JsonCache jsonCache;
 
+    @InjectView(R.id.progress_bar)
+    View progressBar;
+    @InjectView(R.id.lst_main)
+    ListView lstMain;
+
+
     private AlbumsAdapter adapter;
     private AlertDialog dialog;
     private Context context;
@@ -41,14 +49,13 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
         this.context = context;
         MPOFApp.get(context).inject(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Select album...");
+        builder.setTitle(context.getString(R.string.select_album));
         View view = View.inflate(context, R.layout.popup_albums, null);
-
-        ListView lstView = (ListView) view.findViewById(R.id.lst_main);
+        ButterKnife.inject(this, view);
         adapter = new AlbumsAdapter(context, R.layout.item_album);
-        lstView.setAdapter(adapter);
-        lstView.setOnItemClickListener(this);
-        lstView.setOnScrollListener(this);
+        lstMain.setAdapter(adapter);
+        lstMain.setOnItemClickListener(this);
+        lstMain.setOnScrollListener(this);
 
         builder.setView(view);
         dialog = builder.create();
@@ -62,6 +69,7 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
 
     @Override
     public void addAlbums(List<GraphAlbum> albums) {
+        progressBar.setVisibility(View.GONE);
         for (GraphAlbum a : albums) {
             adapter.add(a);
         }
@@ -92,7 +100,7 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
 
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem + visibleItemCount > adapter.getCount() - 2) {
+        if (adapter.getCount() > 10 && firstVisibleItem + visibleItemCount > adapter.getCount() - 2) {
             albumsPresenter.onNeedLoadmore();
         }
     }

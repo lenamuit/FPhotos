@@ -22,9 +22,33 @@ public class LogUtils {
         }
     }
 
+    public static void e(String tag, String msg, Exception e) {
+        if (BuildConfig.DEBUG) {
+            Log.e(tag, msg, e);
+        }
+    }
+
+    public static void e(String tag, String msg, Error e) {
+        if (BuildConfig.DEBUG) {
+            Log.e(tag, msg, e);
+        }
+    }
+
     public static void w(String msg) {
         if (BuildConfig.DEBUG) {
             Log.w(TAG, msg);
+        }
+    }
+
+    public static void d(String msg) {
+        if (BuildConfig.DEBUG) {
+            Log.w(TAG, msg);
+        }
+    }
+
+    public static void d(String tag, String msg) {
+        if (BuildConfig.DEBUG) {
+            Log.w(tag, msg);
         }
     }
 

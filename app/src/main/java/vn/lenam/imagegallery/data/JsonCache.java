@@ -1,7 +1,6 @@
 package vn.lenam.imagegallery.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.jakewharton.disklrucache.DiskLruCache;
 
@@ -56,7 +55,7 @@ public class JsonCache {
             editor.commit();
         } catch (IOException e) {
             if (BuildConfig.DEBUG) {
-                Log.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
+                LogUtils.d("cache_test_DISK_", "ERROR on: image put on disk cache " + key);
             }
             try {
                 if (editor != null) {

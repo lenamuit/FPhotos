@@ -2,7 +2,6 @@ package vn.lenam.imagegallery.data;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.Log;
 
 import com.android.volley.toolbox.ImageLoader;
 
@@ -12,6 +11,7 @@ import java.io.FileOutputStream;
 import javax.inject.Inject;
 
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.helper.LogUtils;
 
 /**
  * Created by Le Nam on 11-Aug-14.
@@ -48,7 +48,7 @@ public class StoreBitmapServiceImpl implements StoreBitmapService {
             out.close();
             return file.getAbsolutePath();
         } catch (Exception e) {
-            Log.e("save image", "error", e);
+            LogUtils.e("save image", "error", e);
         }
         return null;
     }

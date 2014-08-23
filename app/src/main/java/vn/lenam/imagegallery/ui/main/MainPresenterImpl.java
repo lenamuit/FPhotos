@@ -1,7 +1,5 @@
 package vn.lenam.imagegallery.ui.main;
 
-import android.util.Log;
-
 import com.facebook.Session;
 import com.facebook.SessionState;
 
@@ -102,7 +100,6 @@ public class MainPresenterImpl implements MainPresenter, Session.StatusCallback,
      */
     @Override
     public void onSelected(GraphAlbum album) {
-        Log.e("Namlh", "select album " + album.getName());
         String path = album.getId() + "/photos";
 
         mainView.clearPhotos();
