@@ -9,4 +9,6 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
  */
 public interface ShareHandler {
     void startShareSns(Context context, GraphPhotoInfo photo);
+
+    void startSaveGallery(Context context, GraphPhotoInfo photo);
 }

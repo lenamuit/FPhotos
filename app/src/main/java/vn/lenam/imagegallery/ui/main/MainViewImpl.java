@@ -161,6 +161,12 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         }
     }
 
+    @OnClick(R.id.btn_save)
+    void saveBitmap() {
+        int pos = viewPager.getCurrentItem();
+        shareHandler.startSaveGallery(getContext(), imageFragAdapter.getPhoto(pos));
+    }
+
     public boolean onBackPressed() {
         return photoInfoPopupWindow.dismiss();
     }

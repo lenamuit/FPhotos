@@ -41,8 +41,12 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
         this.callback = callback;
         this.fileName = getFileName(path);
         if (this.fileName != null) {
-            FileRequest request = new FileRequest(Request.Method.GET, path, this);
-            requestQueue.add(request);
+            if (isFileExists(fileName)) {
+                callback.onCompleted(GAL_PATH + "/" + fileName, false);
+            } else {
+                FileRequest request = new FileRequest(Request.Method.GET, path, this);
+                requestQueue.add(request);
+            }
         }
     }
 
@@ -73,6 +77,11 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
             return name;
         }
         return null;
+    }
+
+    private boolean isFileExists(String fileName) {
+        File file = new File(GAL_PATH + "/" + fileName);
+        return file.exists();
     }
 
 
