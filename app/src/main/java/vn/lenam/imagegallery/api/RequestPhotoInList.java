@@ -8,6 +8,8 @@ import com.facebook.model.GraphObjectList;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
@@ -16,7 +18,7 @@ import vn.lenam.imagegallery.data.JsonCache;
 /**
  * Created by Le Nam on 08-Aug-14.
  */
-class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
+class RequestPhotoInList implements RequestApi<List<GraphPhotoInfo>> {
     static final String KEY_CACHE = "photo_in_list";
     @Inject
     JsonCache cache;
@@ -25,10 +27,10 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
     private boolean canLoadMore = true;
     private String keyCache;
 
-    private OnRequestListCompleted<GraphPhotoInfo> onRequestPhotoCompleted;
+    private OnRequestApiCompleted<List<GraphPhotoInfo>> onRequestPhotoCompleted;
     private Request request;
 
-    public static RequestApi<GraphPhotoInfo> getInstance() {
+    public static RequestApi<List<GraphPhotoInfo>> getInstance() {
         return new RequestPhotoInList();
     }
 
@@ -68,7 +70,7 @@ class RequestPhotoInList implements RequestApi<GraphPhotoInfo> {
     }
 
     @Override
-    public void request(String path, OnRequestListCompleted<GraphPhotoInfo> callback) {
+    public void request(String path, OnRequestApiCompleted<List<GraphPhotoInfo>> callback) {
         this.keyCache = KEY_CACHE + path.replace("/", "_");
         Session session = Session.getActiveSession();
         this.onRequestPhotoCompleted = callback;

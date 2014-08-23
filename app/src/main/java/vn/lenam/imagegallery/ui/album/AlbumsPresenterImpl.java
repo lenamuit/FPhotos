@@ -4,17 +4,17 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import vn.lenam.imagegallery.api.OnRequestListCompleted;
+import vn.lenam.imagegallery.api.OnRequestApiCompleted;
 import vn.lenam.imagegallery.api.RequestApi;
 import vn.lenam.imagegallery.api.model.GraphAlbum;
 
 /**
  * Created by Le Nam on 09-Aug-14.
  */
-public class AlbumsPresenterImpl implements AlbumsPresenter, OnRequestListCompleted<GraphAlbum> {
+public class AlbumsPresenterImpl implements AlbumsPresenter, OnRequestApiCompleted<List<GraphAlbum>> {
 
     @Inject
-    RequestApi<GraphAlbum> requestAlbums;
+    RequestApi<List<GraphAlbum>> requestAlbums;
 
     private AlbumsView albumsView;
 

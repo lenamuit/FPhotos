@@ -9,6 +9,8 @@ import com.android.volley.toolbox.HttpClientStack;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
+import java.util.List;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -30,7 +32,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public RequestApi<GraphPhotoInfo> provideRequestPhoto(Context context) {
+    public RequestApi<List<GraphPhotoInfo>> provideRequestPhoto(Context context) {
         RequestPhotoInList request = (RequestPhotoInList) RequestPhotoInList.getInstance();
         MPOFApp.get(context).inject(request);
         return request;
@@ -38,7 +40,7 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    public RequestApi<GraphAlbum> provideRequestAlbums(Context context) {
+    public RequestApi<List<GraphAlbum>> provideRequestAlbums(Context context) {
         RequestAlbumInList requestAlbumInList = (RequestAlbumInList) RequestAlbumInList.getInstance();
         MPOFApp.get(context).inject(requestAlbumInList);
         return requestAlbumInList;

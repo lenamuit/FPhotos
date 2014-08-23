@@ -8,6 +8,8 @@ import com.facebook.model.GraphObjectList;
 
 import org.json.JSONObject;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import vn.lenam.imagegallery.api.model.GraphAlbum;
@@ -16,23 +18,23 @@ import vn.lenam.imagegallery.data.JsonCache;
 /**
  * Created by namlh on 8/9/14.
  */
-class RequestAlbumInList implements RequestApi<GraphAlbum> {
+class RequestAlbumInList implements RequestApi<List<GraphAlbum>> {
     static final String KEY_CACHE = "album_in_list";
 
     @Inject
     JsonCache cache;
 
-    private OnRequestListCompleted<GraphAlbum> callback;
+    private OnRequestApiCompleted<List<GraphAlbum>> callback;
     private Request request;
     private boolean canLoadmore = false;
     private int currentPage = 0;
 
-    public static RequestApi<GraphAlbum> getInstance() {
+    public static RequestApi<List<GraphAlbum>> getInstance() {
         return new RequestAlbumInList();
     }
 
     @Override
-    public void request(String path, OnRequestListCompleted<GraphAlbum> callback) {
+    public void request(String path, OnRequestApiCompleted<List<GraphAlbum>> callback) {
         this.callback = callback;
         Session session = Session.getActiveSession();
         currentPage = 0;

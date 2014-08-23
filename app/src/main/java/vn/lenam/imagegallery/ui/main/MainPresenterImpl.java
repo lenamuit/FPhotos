@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import vn.lenam.imagegallery.api.OnRequestListCompleted;
+import vn.lenam.imagegallery.api.OnRequestApiCompleted;
 import vn.lenam.imagegallery.api.RequestApi;
 import vn.lenam.imagegallery.api.model.GraphAlbum;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
@@ -18,10 +18,10 @@ import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 /**
  * Created by namlh on 8/7/14.
  */
-public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestListCompleted<GraphPhotoInfo>, OnAlbumSelected {
+public class MainPresenterImpl implements MainPresenter, Session.StatusCallback, OnRequestApiCompleted<List<GraphPhotoInfo>>, OnAlbumSelected {
 
     @Inject
-    RequestApi<GraphPhotoInfo> requestPhotos;
+    RequestApi<List<GraphPhotoInfo>> requestPhotos;
 
     @Inject
     StoreBitmapService storeBitmapService;
