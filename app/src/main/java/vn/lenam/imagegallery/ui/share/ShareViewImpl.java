@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+
 import java.io.File;
 
 import javax.inject.Inject;
@@ -16,16 +19,25 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 import vn.lenam.imagegallery.helper.DialogHelper;
 import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.helper.ToastUtils;
+import vn.lenam.imagegallery.services.UploadCompletedListener;
+import vn.lenam.imagegallery.services.dropbox.DropboxUploader;
 
 /**
  * Created by Le Nam on 23-Aug-14.
  */
-class ShareViewImpl implements ShareView, ShareHandler {
+class ShareViewImpl implements ShareView, ShareHandler, UploadCompletedListener {
 
     private static final int TYPE_SHARE_SNS = 1;
     private static final int TYPE_SAVE_GALLERY = 2;
+    private static final int TYPE_UPLOAD_DROPBOX = 3;
+
     @Inject
     SharePresenter presenter;
+    @Inject
+    DropboxUploader dropboxUploader;
+    @Inject
+    DropboxAPI<AndroidAuthSession> dropboxAPI;
+
     private int type;
     private Dialog dialog;
     private Context context;
@@ -47,6 +59,14 @@ class ShareViewImpl implements ShareView, ShareHandler {
     }
 
     @Override
+    public void startUploadDrpobox(Context context, GraphPhotoInfo photo) {
+        this.type = TYPE_UPLOAD_DROPBOX;
+        this.context = context;
+        this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
+        presenter.onStartDownloadFile(this, photo);
+    }
+
+    @Override
     public void downloadSuccess(String filePath) {
         dialog.dismiss();
         switch (type) {
@@ -56,7 +76,14 @@ class ShareViewImpl implements ShareView, ShareHandler {
             case TYPE_SAVE_GALLERY:
                 doSaveGallery(filePath);
                 break;
+            case TYPE_UPLOAD_DROPBOX:
+                doUploadDropbox(filePath);
+                break;
         }
+    }
+
+    private void doUploadDropbox(String filePath) {
+        dropboxUploader.upload(filePath, this);
     }
 
     private void doSaveGallery(final String filePath) {
@@ -90,4 +117,22 @@ class ShareViewImpl implements ShareView, ShareHandler {
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.msg_share_image)));
     }
 
+    @Override
+    public void onUploadComplete(String url) {
+
+    }
+
+    @Override
+    public void onUploadError(String message) {
+        ToastUtils.showToast(context, message);
+    }
+
+    @Override
+    public void authError() {
+        switch (type) {
+            case TYPE_UPLOAD_DROPBOX:
+                dropboxAPI.getSession().startOAuth2Authentication(context);
+                break;
+        }
+    }
 }

@@ -171,6 +171,14 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         }
     }
 
+    @OnClick(R.id.btn_dropbox)
+    void uploadDrpobox() {
+        if (imageFragAdapter.getCount() > 0) {
+            int pos = viewPager.getCurrentItem();
+            shareHandler.startUploadDrpobox(getContext(), imageFragAdapter.getPhoto(pos));
+        }
+    }
+
     public boolean onBackPressed() {
         return photoInfoPopupWindow.dismiss();
     }

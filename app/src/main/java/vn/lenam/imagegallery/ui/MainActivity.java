@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
 import com.facebook.Session;
 import com.facebook.UiLifecycleHelper;
 
@@ -15,6 +17,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
+import vn.lenam.imagegallery.helper.LogUtils;
+import vn.lenam.imagegallery.services.dropbox.DropboxAuthCallback;
 import vn.lenam.imagegallery.ui.album.AlbumsDialog;
 import vn.lenam.imagegallery.ui.main.MainViewImpl;
 
@@ -28,6 +32,10 @@ public class MainActivity extends FragmentActivity {
     UiLifecycleHelper uiHelper;
     @Inject
     Session.StatusCallback sessionStatusCallback;
+    @Inject
+    DropboxAuthCallback dropboxAuthCallback;
+    @Inject
+    DropboxAPI<AndroidAuthSession> dropboxAPI;
 
     @InjectView(R.id.container)
     MainViewImpl container;
@@ -53,7 +61,20 @@ public class MainActivity extends FragmentActivity {
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
-
+        //Auth with dropbox handle
+        if (dropboxAPI.getSession().authenticationSuccessful()) {
+            try {
+                // Required to complete auth, sets the access token on the session
+                dropboxAPI.getSession().finishAuthentication();
+                String accessToken = dropboxAPI.getSession().getOAuth2AccessToken();
+                dropboxAuthCallback.authSuccess(accessToken);
+            } catch (IllegalStateException e) {
+                LogUtils.w("DbAuthLog", "Error authenticating", e);
+                dropboxAuthCallback.authFail();
+            }
+        } else {
+            dropboxAuthCallback.authFail();
+        }
     }
 
     @Override

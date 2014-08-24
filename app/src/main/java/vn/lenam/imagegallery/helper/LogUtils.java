@@ -53,4 +53,9 @@ public class LogUtils {
     }
 
 
+    public static void w(String dbAuthLog, String s, IllegalStateException e) {
+        if (BuildConfig.DEBUG) {
+            Log.w(dbAuthLog, s, e);
+        }
+    }
 }

@@ -29,6 +29,7 @@ import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.api.ApiModule;
 import vn.lenam.imagegallery.data.DataModule;
+import vn.lenam.imagegallery.services.dropbox.DropboxModule;
 import vn.lenam.imagegallery.ui.MainActivity;
 import vn.lenam.imagegallery.ui.album.AlbumModule;
 import vn.lenam.imagegallery.ui.main.MainModule;
@@ -44,7 +45,8 @@ import vn.lenam.imagegallery.ui.share.ShareModule;
                 ApiModule.class,
                 ShareModule.class,
                 MainModule.class,
-                AlbumModule.class
+                AlbumModule.class,
+                DropboxModule.class
         }
 )
 public class AppModule {

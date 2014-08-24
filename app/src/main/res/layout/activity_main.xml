@@ -66,6 +66,15 @@
             android:src="@drawable/ic_save" />
 
         <ImageButton
+            android:id="@+id/btn_dropbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@id/btn_save"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_dropbox" />
+
+        <ImageButton
             android:id="@+id/btn_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

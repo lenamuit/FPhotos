@@ -11,4 +11,8 @@ public class ToastUtils {
     public static void showToast(Context context, int id) {
         Toast.makeText(context, id, Toast.LENGTH_LONG).show();
     }
+
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
 }
