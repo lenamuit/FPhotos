@@ -34,4 +34,10 @@ public class DataModule {
         return storeBitmapService;
     }
 
+    @Provides
+    @Singleton
+    public PrefService providePrefService(Application app) {
+        return new PrefSeviceImpl(app);
+    }
+
 }

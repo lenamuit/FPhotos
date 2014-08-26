@@ -83,6 +83,7 @@ class ShareViewImpl implements ShareView, ShareHandler, UploadCompletedListener 
     }
 
     private void doUploadDropbox(String filePath) {
+        this.dialog = ProgressDialog.show(context, "Uploading...", "Please wait...");
         dropboxUploader.upload(filePath, this);
     }
 
@@ -119,7 +120,8 @@ class ShareViewImpl implements ShareView, ShareHandler, UploadCompletedListener 
 
     @Override
     public void onUploadComplete(String url) {
-
+        dialog.dismiss();
+        ToastUtils.showToast(context, "Upload successful.");
     }
 
     @Override
