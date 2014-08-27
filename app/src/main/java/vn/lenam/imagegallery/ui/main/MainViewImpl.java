@@ -61,9 +61,10 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     ShareHandler shareHandler;
 
     FragmentManager fragmentManager;
+    @InjectView(R.id.pager)
+    ViewPager viewPager;
     private PhotoInfoPopupWindow photoInfoPopupWindow;
     private ImageViewFragmentAdapter imageFragAdapter;
-    private ViewPager viewPager;
     private ProgressDialog progressDialog;
 
     public MainViewImpl(Context context, AttributeSet attrs) {
@@ -80,7 +81,6 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         ButterKnife.inject(this);
         //TODO need inject permission list
         authButton.setReadPermissions(Arrays.asList("email", "user_photos"));
-        viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setOffscreenPageLimit(1);
         imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
