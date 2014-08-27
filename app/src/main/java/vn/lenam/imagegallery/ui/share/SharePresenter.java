@@ -7,6 +7,17 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
  */
 public interface SharePresenter {
 
-    void onStartDownloadFile(ShareView view, GraphPhotoInfo photo);
+    void onStartDownloadFile(ShareType type, ShareView view, GraphPhotoInfo photo);
+
+    public enum ShareType {
+        DROPBOX(0),
+        SNS(1),
+        GALLERY(2);
+        final int nativeInt;
+
+        ShareType(int ni) {
+            nativeInt = ni;
+        }
+    }
 
 }

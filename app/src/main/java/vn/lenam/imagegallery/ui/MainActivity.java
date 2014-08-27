@@ -17,6 +17,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
+import vn.lenam.imagegallery.data.PrefService;
 import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.services.dropbox.DropboxAuthCallback;
 import vn.lenam.imagegallery.ui.album.AlbumsDialog;
@@ -36,6 +37,8 @@ public class MainActivity extends FragmentActivity {
     DropboxAuthCallback dropboxAuthCallback;
     @Inject
     DropboxAPI<AndroidAuthSession> dropboxAPI;
+    @Inject
+    PrefService prefService;
 
     @InjectView(R.id.container)
     MainViewImpl container;
@@ -61,20 +64,7 @@ public class MainActivity extends FragmentActivity {
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
-        //Auth with dropbox handle
-        if (dropboxAPI.getSession().authenticationSuccessful()) {
-            try {
-                // Required to complete auth, sets the access token on the session
-                dropboxAPI.getSession().finishAuthentication();
-                String accessToken = dropboxAPI.getSession().getOAuth2AccessToken();
-                dropboxAuthCallback.authSuccess(accessToken);
-            } catch (IllegalStateException e) {
-                LogUtils.w("DbAuthLog", "Error authenticating", e);
-                dropboxAuthCallback.authFail();
-            }
-        } else {
-            dropboxAuthCallback.authFail();
-        }
+        dropboxResume();
     }
 
     @Override
@@ -115,5 +105,29 @@ public class MainActivity extends FragmentActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    /**
+     * handle dropbox on resume
+     */
+    private void dropboxResume() {
+        //Auth with dropbox handle
+        String dropbox_token = prefService.getString(PrefService.PrefType.DROPBOX_TOKEN);
+        if (dropbox_token != null) {
+            return;
+        }
+        if (dropboxAPI.getSession().authenticationSuccessful()) {
+            try {
+                // Required to complete auth, sets the access token on the session
+                dropboxAPI.getSession().finishAuthentication();
+                String accessToken = dropboxAPI.getSession().getOAuth2AccessToken();
+                dropboxAuthCallback.authSuccess(accessToken);
+            } catch (IllegalStateException e) {
+                LogUtils.w("DbAuthLog", "Error authenticating", e);
+                dropboxAuthCallback.authFail();
+            }
+        } else {
+            dropboxAuthCallback.authFail();
+        }
     }
 }

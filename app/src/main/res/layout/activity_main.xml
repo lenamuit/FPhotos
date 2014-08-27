@@ -47,32 +47,38 @@
             android:background="@android:color/transparent"
             android:src="@drawable/ic_album" />
 
-        <ImageButton
-            android:id="@+id/btn_share"
+        <LinearLayout
+            android:id="@+id/ln_share_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_margin="5dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_share" />
+            android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_toLeftOf="@id/btn_share"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_save" />
+            <ImageButton
 
-        <ImageButton
-            android:id="@+id/btn_dropbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_toLeftOf="@id/btn_save"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_dropbox" />
+                android:id="@+id/btn_dropbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_dropbox" />
+
+            <ImageButton
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_save" />
+
+            <ImageButton
+                android:id="@+id/btn_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_share" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/btn_info"

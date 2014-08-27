@@ -52,6 +52,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @InjectView(R.id.tv_message)
     TextView tvMessage;
 
+    @InjectView(R.id.ln_share_action)
+    View lnShareAction;
+
     @Inject
     MainPresenter presenter;
     @Inject
@@ -123,11 +126,13 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @Override
     public void showNoticeNoNetwork() {
         tvNoInternet.setVisibility(VISIBLE);
+        lnShareAction.setVisibility(GONE);
     }
 
     @Override
     public void hideNoticeNoNetwork() {
         tvNoInternet.setVisibility(GONE);
+        lnShareAction.setVisibility(VISIBLE);
     }
 
     @Override
@@ -175,7 +180,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     void uploadDrpobox() {
         if (imageFragAdapter.getCount() > 0) {
             int pos = viewPager.getCurrentItem();
-            shareHandler.startUploadDrpobox(getContext(), imageFragAdapter.getPhoto(pos));
+            shareHandler.startUploadDropbox(getContext(), imageFragAdapter.getPhoto(pos));
         }
     }
 

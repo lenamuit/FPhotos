@@ -5,6 +5,9 @@ package vn.lenam.imagegallery.ui.share;
  */
 public interface ShareView {
 
-    void downloadSuccess(String filePath);
+    void sharedSuccess(SharePresenter.ShareType type, String filePath);
 
+    void sharedError(SharePresenter.ShareType type, String message);
+
+    void authError(SharePresenter.ShareType type);
 }

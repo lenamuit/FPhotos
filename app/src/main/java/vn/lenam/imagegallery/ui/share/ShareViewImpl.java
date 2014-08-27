@@ -19,75 +19,82 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 import vn.lenam.imagegallery.helper.DialogHelper;
 import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.helper.ToastUtils;
-import vn.lenam.imagegallery.services.UploadCompletedListener;
-import vn.lenam.imagegallery.services.dropbox.DropboxUploader;
 
 /**
  * Created by Le Nam on 23-Aug-14.
  */
-class ShareViewImpl implements ShareView, ShareHandler, UploadCompletedListener {
+class ShareViewImpl implements ShareView, ShareHandler {
 
-    private static final int TYPE_SHARE_SNS = 1;
-    private static final int TYPE_SAVE_GALLERY = 2;
-    private static final int TYPE_UPLOAD_DROPBOX = 3;
 
     @Inject
     SharePresenter presenter;
-    @Inject
-    DropboxUploader dropboxUploader;
+
     @Inject
     DropboxAPI<AndroidAuthSession> dropboxAPI;
 
-    private int type;
     private Dialog dialog;
     private Context context;
 
     @Override
     public void startShareSns(Context context, GraphPhotoInfo photo) {
         this.context = context;
-        type = TYPE_SHARE_SNS;
         this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
-        presenter.onStartDownloadFile(this, photo);
+        presenter.onStartDownloadFile(SharePresenter.ShareType.SNS, this, photo);
     }
 
     @Override
     public void startSaveGallery(Context context, GraphPhotoInfo photo) {
         this.context = context;
-        type = TYPE_SAVE_GALLERY;
         this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
-        presenter.onStartDownloadFile(this, photo);
+        presenter.onStartDownloadFile(SharePresenter.ShareType.GALLERY, this, photo);
     }
 
     @Override
-    public void startUploadDrpobox(Context context, GraphPhotoInfo photo) {
-        this.type = TYPE_UPLOAD_DROPBOX;
+    public void startUploadDropbox(Context context, GraphPhotoInfo photo) {
         this.context = context;
-        this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
-        presenter.onStartDownloadFile(this, photo);
+        this.dialog = ProgressDialog.show(context, "Uploading...", "Please wait...");
+        presenter.onStartDownloadFile(SharePresenter.ShareType.DROPBOX, this, photo);
     }
 
     @Override
-    public void downloadSuccess(String filePath) {
+    public void sharedSuccess(SharePresenter.ShareType type, String filePath) {
         dialog.dismiss();
         switch (type) {
-            case TYPE_SHARE_SNS:
+            case SNS:
                 doShareSns(filePath);
                 break;
-            case TYPE_SAVE_GALLERY:
-                doSaveGallery(filePath);
+            case GALLERY:
+                doOpenGallery(filePath);
                 break;
-            case TYPE_UPLOAD_DROPBOX:
-                doUploadDropbox(filePath);
+            case DROPBOX:
+//                doUploadDropbox(filePath);
+                ToastUtils.showToast(context, "Upload file successful.");
                 break;
         }
     }
 
-    private void doUploadDropbox(String filePath) {
-        this.dialog = ProgressDialog.show(context, "Uploading...", "Please wait...");
-        dropboxUploader.upload(filePath, this);
+    @Override
+    public void sharedError(SharePresenter.ShareType type, String message) {
+        dialog.dismiss();
+        ToastUtils.showToast(context, message);
     }
 
-    private void doSaveGallery(final String filePath) {
+    @Override
+    public void authError(SharePresenter.ShareType type) {
+        dialog.dismiss();
+        switch (type) {
+            case DROPBOX:
+                dropboxAPI.getSession().startOAuth2Authentication(context);
+                break;
+        }
+    }
+
+//    private void doUploadDropbox(String filePath) {
+//        this.dialog = ProgressDialog.show(context, "Uploading...", "Please wait...");
+//        dropboxUploader.upload(filePath, this);
+//    }
+
+    private void doOpenGallery(final String filePath) {
         ToastUtils.showToast(context, R.string.msg_save_gallery);
         DialogHelper.showConfirmDilog(context, R.string.msg_confirm_open_photo, new DialogInterface.OnClickListener() {
             @Override
@@ -118,23 +125,4 @@ class ShareViewImpl implements ShareView, ShareHandler, UploadCompletedListener 
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.msg_share_image)));
     }
 
-    @Override
-    public void onUploadComplete(String url) {
-        dialog.dismiss();
-        ToastUtils.showToast(context, "Upload successful.");
-    }
-
-    @Override
-    public void onUploadError(String message) {
-        ToastUtils.showToast(context, message);
-    }
-
-    @Override
-    public void authError() {
-        switch (type) {
-            case TYPE_UPLOAD_DROPBOX:
-                dropboxAPI.getSession().startOAuth2Authentication(context);
-                break;
-        }
-    }
 }
