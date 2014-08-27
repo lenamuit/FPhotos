@@ -72,4 +72,14 @@ dependencies {
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile "com.bugsense.trace:bugsense:3.6.1"
+
+    compile 'com.google.android.gms:play-services:5.0.77'
+//    compile('com.google.api-client:google-api-client:1.4.1-beta') {
+//        exclude group: 'com.google.android.google-play-services'
+//    }
+//    compile 'com.google.http-client:google-http-client-gson:1.15.0-rc'
+//    compile('com.google.api-client:google-api-client-android:1.15.0-rc') {
+//        exclude group: 'com.google.android.google-play-services'
+//    }
+//    compile 'com.google.apis:google-api-services-drive:v2-rev82-1.15.0-rc'
 }

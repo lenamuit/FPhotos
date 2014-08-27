@@ -9,6 +9,8 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.facebook.Session;
 import com.facebook.UiLifecycleHelper;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.drive.Drive;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -45,6 +47,10 @@ public class MainActivity extends FragmentActivity {
     MainViewImpl container;
 
     private AlbumsDialog albumsView;
+    private GoogleApiClient.ConnectionCallbacks driveConnectionCallback;
+    private GoogleApiClient.OnConnectionFailedListener driveOnConnectionFailed;
+
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +65,20 @@ public class MainActivity extends FragmentActivity {
         uiHelper = new UiLifecycleHelper(this, sessionStatusCallback);
         uiHelper.onCreate(savedInstanceState);
 
+        //config google client api
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Drive.API)
+                .addScope(Drive.SCOPE_FILE)
+                .addConnectionCallbacks(driveConnectionCallback)
+                .addOnConnectionFailedListener(driveOnConnectionFailed)
+                .build();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
     }
 
     @Override
