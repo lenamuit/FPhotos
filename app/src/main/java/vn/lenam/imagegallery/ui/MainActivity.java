@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.bugsense.trace.BugSenseHandler;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.facebook.Session;
 import com.facebook.UiLifecycleHelper;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.drive.Drive;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -50,12 +48,12 @@ public class MainActivity extends FragmentActivity {
     private GoogleApiClient.ConnectionCallbacks driveConnectionCallback;
     private GoogleApiClient.OnConnectionFailedListener driveOnConnectionFailed;
 
-    private GoogleApiClient mGoogleApiClient;
+//    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BugSenseHandler.initAndStartSession(this, "2ebd5a77");
+//        BugSenseHandler.initAndStartSession(this, "2ebd5a77");
         setContentView(R.layout.activity_main);
 
         MPOFApp.get(this).inject(this);
@@ -66,19 +64,19 @@ public class MainActivity extends FragmentActivity {
         uiHelper.onCreate(savedInstanceState);
 
         //config google client api
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Drive.API)
-                .addScope(Drive.SCOPE_FILE)
-                .addConnectionCallbacks(driveConnectionCallback)
-                .addOnConnectionFailedListener(driveOnConnectionFailed)
-                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .addApi(Drive.API)
+//                .addScope(Drive.SCOPE_FILE)
+//                .addConnectionCallbacks(driveConnectionCallback)
+//                .addOnConnectionFailedListener(driveOnConnectionFailed)
+//                .build();
 
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        mGoogleApiClient.connect();
+//        mGoogleApiClient.connect();
     }
 
     @Override

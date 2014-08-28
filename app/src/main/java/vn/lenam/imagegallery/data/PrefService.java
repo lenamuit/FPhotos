@@ -8,7 +8,11 @@ public interface PrefService {
 
     public String getString(PrefType type);
 
+    public void saveInt(PrefType type, int value);
+
+    public int getInt(PrefType type);
+
     public enum PrefType {
-        DROPBOX_TOKEN
+        DROPBOX_TOKEN, IMG_COUNTER
     }
 }

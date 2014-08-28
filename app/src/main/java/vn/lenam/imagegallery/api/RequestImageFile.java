@@ -14,6 +14,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import vn.lenam.imagegallery.data.PrefService;
+
 /**
  * Created by Le Nam on 23-Aug-14.
  */
@@ -21,9 +23,15 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
 
     private static final String GAL_PATH = Environment.
             getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).
-            getAbsolutePath() + "/My Photos on Facebook";
+            getAbsolutePath() + "/FPhotos";
+    private static final String FILENAME_FORMAT = "FP%06d.jpg";
+
     @Inject
     RequestQueue requestQueue;
+
+    @Inject
+    PrefService prefService;
+
     private String fileName;
     private OnRequestApiCompleted<String> callback;
 
@@ -67,16 +75,10 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
      * @return
      */
     private String getFileName(String url) {
-        String[] urls = url.split("/");
-        String name = urls[urls.length - 1];
-        if (name.contains(".jpg")) {
-            int index = name.indexOf('?');
-            if (index >= 0) {
-                return name.substring(0, index);
-            }
-            return name;
-        }
-        return null;
+        int imgCounter = prefService.getInt(PrefService.PrefType.IMG_COUNTER);
+        imgCounter++;
+        prefService.saveInt(PrefService.PrefType.IMG_COUNTER, imgCounter);
+        return String.format(FILENAME_FORMAT, imgCounter);
     }
 
     private boolean isFileExists(String fileName) {

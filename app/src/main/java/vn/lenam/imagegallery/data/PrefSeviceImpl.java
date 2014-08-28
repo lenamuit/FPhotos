@@ -10,7 +10,7 @@ import javax.inject.Inject;
  */
 class PrefSeviceImpl implements PrefService {
 
-    private static final String PREF_NAME = "my_photos_on_facebook";
+    private static final String PREF_NAME = "fbphotos_pref";
     private Context context;
 
     @Inject
@@ -29,5 +29,18 @@ class PrefSeviceImpl implements PrefService {
     public String getString(PrefType type) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(type.name(), null);
+    }
+
+    @Override
+    public void saveInt(PrefType type, int value) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(type.name(), value).apply();
+    }
+
+    @Override
+    public int getInt(PrefType type) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(type.name(), 0);
     }
 }

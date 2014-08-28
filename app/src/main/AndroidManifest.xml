@@ -14,15 +14,16 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+        android:theme="@android:style/Theme.Holo">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="\ ${facebookId}" />
 
         <activity
             android:name=".ui.MainActivity"
-            android:label="@string/app_name">
-            <intent-filter>
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
+        <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
