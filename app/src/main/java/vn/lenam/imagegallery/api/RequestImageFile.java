@@ -75,9 +75,9 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
      * @return
      */
     private String getFileName(String url) {
-        int imgCounter = prefService.getInt(PrefService.PrefType.IMG_COUNTER);
+        int imgCounter = prefService.getInt(PrefService.PrefKey.IMG_COUNTER);
         imgCounter++;
-        prefService.saveInt(PrefService.PrefType.IMG_COUNTER, imgCounter);
+        prefService.saveInt(PrefService.PrefKey.IMG_COUNTER, imgCounter);
         return String.format(FILENAME_FORMAT, imgCounter);
     }
 

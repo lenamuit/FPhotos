@@ -19,27 +19,27 @@ class PrefSeviceImpl implements PrefService {
     }
 
     @Override
-    public void saveString(PrefType type, String value) {
+    public void saveString(PrefKey type, String value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(type.name(), value).apply();
     }
 
     @Override
-    public String getString(PrefType type) {
+    public String getString(PrefKey type) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(type.name(), null);
     }
 
     @Override
-    public void saveInt(PrefType type, int value) {
+    public void saveInt(PrefKey type, int value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(type.name(), value).apply();
     }
 
     @Override
-    public int getInt(PrefType type) {
+    public int getInt(PrefKey type) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getInt(type.name(), 0);
     }

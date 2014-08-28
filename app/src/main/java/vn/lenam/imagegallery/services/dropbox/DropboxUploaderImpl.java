@@ -41,7 +41,7 @@ class DropboxUploaderImpl implements DropboxUploader, DropboxAuthCallback {
 
     @Override
     public void authSuccess(String token) {
-        mPref.saveString(PrefService.PrefType.DROPBOX_TOKEN, token);
+        mPref.saveString(PrefService.PrefKey.DROPBOX_TOKEN, token);
         // And later in some initialization function:
         AppKeyPair appKeys = new AppKeyPair(DropboxModule.APP_KEY, DropboxModule.APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys, token);
@@ -63,7 +63,7 @@ class DropboxUploaderImpl implements DropboxUploader, DropboxAuthCallback {
     }
 
     private boolean isAuthed() {
-        String token = mPref.getString(PrefService.PrefType.DROPBOX_TOKEN);
+        String token = mPref.getString(PrefService.PrefKey.DROPBOX_TOKEN);
         if (token != null) {
             return true;
         }

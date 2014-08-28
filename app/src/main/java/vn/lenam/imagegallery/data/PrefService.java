@@ -4,15 +4,15 @@ package vn.lenam.imagegallery.data;
  * Created by namlh on 8/26/14.
  */
 public interface PrefService {
-    public void saveString(PrefType type, String value);
+    public void saveString(PrefKey type, String value);
 
-    public String getString(PrefType type);
+    public String getString(PrefKey type);
 
-    public void saveInt(PrefType type, int value);
+    public void saveInt(PrefKey type, int value);
 
-    public int getInt(PrefType type);
+    public int getInt(PrefKey type);
 
-    public enum PrefType {
+    public enum PrefKey {
         DROPBOX_TOKEN, IMG_COUNTER
     }
 }

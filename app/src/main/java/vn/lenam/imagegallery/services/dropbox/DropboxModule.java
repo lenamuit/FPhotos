@@ -48,7 +48,7 @@ public class DropboxModule {
 
         // And later in some initialization function:
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-        AndroidAuthSession session = new AndroidAuthSession(appKeys, prefService.getString(PrefService.PrefType.DROPBOX_TOKEN));
+        AndroidAuthSession session = new AndroidAuthSession(appKeys, prefService.getString(PrefService.PrefKey.DROPBOX_TOKEN));
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
         return mDBApi;
     }

@@ -131,7 +131,7 @@ public class MainActivity extends FragmentActivity {
      */
     private void dropboxResume() {
         //Auth with dropbox handle
-        String dropbox_token = prefService.getString(PrefService.PrefType.DROPBOX_TOKEN);
+        String dropbox_token = prefService.getString(PrefService.PrefKey.DROPBOX_TOKEN);
         if (dropbox_token != null) {
             return;
         }
