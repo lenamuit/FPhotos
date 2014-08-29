@@ -6,6 +6,7 @@ import vn.lenam.imagegallery.api.OnRequestApiCompleted;
 import vn.lenam.imagegallery.api.RequestApi;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 import vn.lenam.imagegallery.services.UploadCompletedListener;
+import vn.lenam.imagegallery.services.drive.DriveUploader;
 import vn.lenam.imagegallery.services.dropbox.DropboxUploader;
 
 /**
@@ -17,6 +18,8 @@ class SharePresenterImpl implements SharePresenter, OnRequestApiCompleted<String
     RequestApi<String> requestFile;
     @Inject
     DropboxUploader dropboxUploader;
+    @Inject
+    DriveUploader driveUploader;
 
     private ShareView shareView;
     private ShareType type;
@@ -43,6 +46,9 @@ class SharePresenterImpl implements SharePresenter, OnRequestApiCompleted<String
                 if (shareView != null) {
                     shareView.sharedSuccess(type, object);
                 }
+                break;
+            case DRIVE:
+                driveUploader.upload(object, this);
                 break;
         }
 

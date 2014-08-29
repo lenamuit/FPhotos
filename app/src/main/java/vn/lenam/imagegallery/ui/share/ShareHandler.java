@@ -13,4 +13,6 @@ public interface ShareHandler {
     void startSaveGallery(Context context, GraphPhotoInfo photo);
 
     void startUploadDropbox(Context context, GraphPhotoInfo photo);
+
+    void startUploadDrive(Context context, GraphPhotoInfo photo);
 }

@@ -12,7 +12,8 @@ public interface SharePresenter {
     public enum ShareType {
         DROPBOX(0),
         SNS(1),
-        GALLERY(2);
+        GALLERY(2),
+        DRIVE(3);
         final int nativeInt;
 
         ShareType(int ni) {

@@ -9,6 +9,7 @@ import android.net.Uri;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
 
@@ -32,6 +33,9 @@ class ShareViewImpl implements ShareView, ShareHandler {
     @Inject
     DropboxAPI<AndroidAuthSession> dropboxAPI;
 
+    @Inject
+    GoogleApiClient googleApiClient;
+
     private Dialog dialog;
     private Context context;
 
@@ -54,6 +58,13 @@ class ShareViewImpl implements ShareView, ShareHandler {
         this.context = context;
         this.dialog = ProgressDialog.show(context, "Uploading...", "Please wait...");
         presenter.onStartDownloadFile(SharePresenter.ShareType.DROPBOX, this, photo);
+    }
+
+    @Override
+    public void startUploadDrive(Context context, GraphPhotoInfo photo) {
+        this.context = context;
+        this.dialog = ProgressDialog.show(context, "Uploading...", "Please wait...");
+        presenter.onStartDownloadFile(SharePresenter.ShareType.DRIVE, this, photo);
     }
 
     @Override
@@ -85,6 +96,9 @@ class ShareViewImpl implements ShareView, ShareHandler {
         switch (type) {
             case DROPBOX:
                 dropboxAPI.getSession().startOAuth2Authentication(context);
+                break;
+            case DRIVE:
+                googleApiClient.connect();
                 break;
         }
     }

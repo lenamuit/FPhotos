@@ -161,6 +161,14 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     }
 
+    @OnClick(R.id.btn_drive)
+    void shareDrive() {
+        if (imageFragAdapter.getCount() > 0) {
+            int pos = viewPager.getCurrentItem();
+            shareHandler.startUploadDrive(getContext(), imageFragAdapter.getPhoto(pos));
+        }
+    }
+
     @OnClick(R.id.btn_info)
     void showInfo() {
         if (imageFragAdapter.getCount() > 0) {

@@ -1,6 +1,7 @@
 package vn.lenam.imagegallery.ui;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -8,6 +9,8 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.facebook.Session;
 import com.facebook.UiLifecycleHelper;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import javax.inject.Inject;
@@ -29,7 +32,9 @@ import vn.lenam.imagegallery.ui.main.MainViewImpl;
  * Created by Le Nam on 06-Aug-14.
  */
 @Singleton
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    private static final int RESOLVE_CONNECTION_REQUEST_CODE = 998;
 
     UiLifecycleHelper uiHelper;
     @Inject
@@ -40,6 +45,8 @@ public class MainActivity extends FragmentActivity {
     DropboxAPI<AndroidAuthSession> dropboxAPI;
     @Inject
     PrefService prefService;
+    @Inject
+    GoogleApiClient googleApiClient;
 
     @InjectView(R.id.container)
     MainViewImpl container;
@@ -63,20 +70,8 @@ public class MainActivity extends FragmentActivity {
         uiHelper = new UiLifecycleHelper(this, sessionStatusCallback);
         uiHelper.onCreate(savedInstanceState);
 
-        //config google client api
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .addApi(Drive.API)
-//                .addScope(Drive.SCOPE_FILE)
-//                .addConnectionCallbacks(driveConnectionCallback)
-//                .addOnConnectionFailedListener(driveOnConnectionFailed)
-//                .build();
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        mGoogleApiClient.connect();
+        //Activity will handle connection fail
+        googleApiClient.registerConnectionFailedListener(this);
     }
 
     @Override
@@ -90,6 +85,13 @@ public class MainActivity extends FragmentActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         uiHelper.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RESOLVE_CONNECTION_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    googleApiClient.connect();
+                }
+                break;
+        }
     }
 
     @Override
@@ -147,6 +149,19 @@ public class MainActivity extends FragmentActivity {
             }
         } else {
             dropboxAuthCallback.authFail();
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
+            } catch (IntentSender.SendIntentException e) {
+                // Unable to resolve, message user appropriately
+            }
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
         }
     }
 }
