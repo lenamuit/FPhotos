@@ -98,6 +98,9 @@ class ShareViewImpl implements ShareView, ShareHandler {
                 dropboxAPI.getSession().startOAuth2Authentication(context);
                 break;
             case DRIVE:
+                if (googleApiClient.isConnected() || googleApiClient.isConnecting()) {
+                    break;
+                }
                 googleApiClient.connect();
                 break;
         }

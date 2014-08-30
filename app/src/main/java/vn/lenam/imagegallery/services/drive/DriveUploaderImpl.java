@@ -43,7 +43,6 @@ class DriveUploaderImpl implements DriveUploader, ResultCallback<DriveApi.Conten
             ResultCallback<DriveFolder.DriveFolderResult>() {
                 @Override
                 public void onResult(DriveFolder.DriveFolderResult result) {
-
                     if (!result.getStatus().isSuccess()) {
                         listener.onUploadError("Problem while trying to create a folder");
                         return;
@@ -125,7 +124,11 @@ class DriveUploaderImpl implements DriveUploader, ResultCallback<DriveApi.Conten
 
     @Override
     public void onConnected(Bundle bundle) {
-        Drive.DriveApi.newContents(mClient).setResultCallback(this);
+        if (driveId == null) {
+            createFolder();
+        } else {
+            Drive.DriveApi.newContents(mClient).setResultCallback(this);
+        }
     }
 
     @Override

@@ -94,7 +94,7 @@ class DropboxUploaderImpl implements DropboxUploader, DropboxAuthCallback {
         @Override
         protected void onPostExecute(Void aVoid) {
             LogUtils.e("upload success");
-            listener.onUploadComplete("http://asdasd.com");
+            listener.onUploadComplete("http://dropbox.com");
             super.onPostExecute(aVoid);
         }
 

@@ -19,7 +19,7 @@ import vn.lenam.imagegallery.helper.LogUtils;
 public class StoreBitmapServiceImpl implements StoreBitmapService {
     private static final String GAL_PATH = Environment.
             getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).
-            getAbsolutePath() + "/My Photos on Facebook";
+            getAbsolutePath() + "/FPhotos";
     private static final String GAL_EXT = ".png";
 
     @Inject

@@ -10,7 +10,7 @@ android {
     compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
     buildToolsVersion project.ANDROID_BUILD_TOOLS_VERSION
     defaultConfig {
-        applicationId 'vn.lenam.imagegallery'
+        applicationId 'com.namlh.fphotos'
         minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
         targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
         versionCode 1
@@ -44,7 +44,7 @@ android {
     }
     productFlavors {
         dev {
-            manifestPlaceholders = [facebookId: "348830125127212"]
+            manifestPlaceholders = [facebookId: "527796837268425"]
         }
         real {
             manifestPlaceholders = [facebookId: "527796837268425"]

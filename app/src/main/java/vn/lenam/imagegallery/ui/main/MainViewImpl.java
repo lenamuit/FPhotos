@@ -1,6 +1,5 @@
 package vn.lenam.imagegallery.ui.main;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 
 import com.facebook.widget.LoginButton;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -65,7 +65,8 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     ViewPager viewPager;
     private PhotoInfoPopupWindow photoInfoPopupWindow;
     private ImageViewFragmentAdapter imageFragAdapter;
-    private ProgressDialog progressDialog;
+
+    private List<GraphPhotoInfo> listPhotos = new ArrayList<GraphPhotoInfo>();
 
     public MainViewImpl(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -113,12 +114,14 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         } else {
             tvMessage.setVisibility(GONE);
             imageFragAdapter.addPhotos(photos);
+            listPhotos.addAll(photos);
         }
 
     }
 
     @Override
     public void clearPhotos() {
+        listPhotos.clear();
         viewPager.setCurrentItem(0);
         imageFragAdapter.clear();
     }
@@ -156,7 +159,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     void shareBitmap() {
         if (imageFragAdapter.getCount() > 0) {
             int pos = viewPager.getCurrentItem();
-            shareHandler.startShareSns(getContext(), imageFragAdapter.getPhoto(pos));
+            shareHandler.startShareSns(getContext(), listPhotos.get(pos));
         }
 
     }
@@ -165,14 +168,14 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     void shareDrive() {
         if (imageFragAdapter.getCount() > 0) {
             int pos = viewPager.getCurrentItem();
-            shareHandler.startUploadDrive(getContext(), imageFragAdapter.getPhoto(pos));
+            shareHandler.startUploadDrive(getContext(), listPhotos.get(pos));
         }
     }
 
     @OnClick(R.id.btn_info)
     void showInfo() {
         if (imageFragAdapter.getCount() > 0) {
-            photoInfoPopupWindow.show(btnInfo, imageFragAdapter.getPhoto(viewPager.getCurrentItem()));
+            photoInfoPopupWindow.show(btnInfo, listPhotos.get(viewPager.getCurrentItem()));
         }
     }
 
@@ -180,7 +183,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     void saveBitmap() {
         if (imageFragAdapter.getCount() > 0) {
             int pos = viewPager.getCurrentItem();
-            shareHandler.startSaveGallery(getContext(), imageFragAdapter.getPhoto(pos));
+            shareHandler.startSaveGallery(getContext(), listPhotos.get(pos));
         }
     }
 
@@ -188,16 +191,12 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     void uploadDrpobox() {
         if (imageFragAdapter.getCount() > 0) {
             int pos = viewPager.getCurrentItem();
-            shareHandler.startUploadDropbox(getContext(), imageFragAdapter.getPhoto(pos));
+            shareHandler.startUploadDropbox(getContext(), listPhotos.get(pos));
         }
     }
 
     public boolean onBackPressed() {
         return photoInfoPopupWindow.dismiss();
-    }
-
-    private void hideProgressDialog() {
-        progressDialog.dismiss();
     }
 
     /**

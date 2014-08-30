@@ -15,27 +15,16 @@ import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
 
-    private List<GraphPhotoInfo> photos;
-
     public ImageViewFragmentAdapter(FragmentManager fm) {
         super(fm);
-        photos = new ArrayList<GraphPhotoInfo>();
     }
 
     public void addPhotos(List<GraphPhotoInfo> photos) {
         for (GraphPhotoInfo p : photos) {
             fragmentList.add(ImageViewFragment.getInstance(p));
-            this.photos.add(p);
         }
 //        this.photos = photos;
         notifyDataSetChanged();
-    }
-
-    public GraphPhotoInfo getPhoto(int pos) {
-        if (photos != null && photos.size() > pos) {
-            return photos.get(pos);
-        }
-        return null;
     }
 
     @Override
@@ -54,7 +43,6 @@ class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
     }
 
     public void clear() {
-        photos.clear();
         fragmentList.clear();
         notifyDataSetChanged();
     }
