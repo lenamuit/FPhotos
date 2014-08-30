@@ -13,6 +13,6 @@ public interface PrefService {
     public int getInt(PrefKey type);
 
     public enum PrefKey {
-        DROPBOX_TOKEN, IMG_COUNTER
+        DROPBOX_TOKEN, IMG_COUNTER, DRIVE_FOLDER_ID
     }
 }

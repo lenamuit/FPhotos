@@ -8,6 +8,7 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveApi;
 import com.google.android.gms.drive.DriveFolder;
+import com.google.android.gms.drive.DriveId;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.common.io.Files;
 
@@ -18,6 +19,7 @@ import java.io.OutputStream;
 import javax.inject.Inject;
 
 import vn.lenam.imagegallery.MPOFApp;
+import vn.lenam.imagegallery.data.PrefService;
 import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.services.UploadCompletedListener;
 
@@ -26,16 +28,46 @@ import vn.lenam.imagegallery.services.UploadCompletedListener;
  */
 class DriveUploaderImpl implements DriveUploader, ResultCallback<DriveApi.ContentsResult>, GoogleApiClient.ConnectionCallbacks {
 
+    private static final String DRIVE_FOLDER_NAME = "FPhotos";
     @Inject
     GoogleApiClient mClient;
-
+    @Inject
+    PrefService prefService;
     private String filePath;
     private UploadCompletedListener listener;
+    private DriveId driveId = null;
+    /**
+     * folder created callback
+     */
+    private ResultCallback<DriveFolder.DriveFolderResult> folderCreatedCallback = new
+            ResultCallback<DriveFolder.DriveFolderResult>() {
+                @Override
+                public void onResult(DriveFolder.DriveFolderResult result) {
+
+                    if (!result.getStatus().isSuccess()) {
+                        listener.onUploadError("Problem while trying to create a folder");
+                        return;
+                    }
+                    driveId = result.getDriveFolder().getDriveId();
+                    prefService.saveString(PrefService.PrefKey.DRIVE_FOLDER_ID, driveId.encodeToString());
+                    LogUtils.w("create folder success driverId: " + driveId);
+                    if (mClient.isConnected()) {
+                        Drive.DriveApi.newContents(mClient).setResultCallback(DriveUploaderImpl.this);
+                    } else {
+                        listener.authError();
+                    }
+                }
+            };
 
     @Inject
     public DriveUploaderImpl(Context context) {
         MPOFApp.get(context).inject(this);
         mClient.registerConnectionCallbacks(this);
+        String driveResId = prefService.getString(PrefService.PrefKey.DRIVE_FOLDER_ID);
+        LogUtils.d("driverID=" + driveResId);
+        if (driveResId != null) {
+            driveId = DriveId.decodeFromString(driveResId);
+        }
     }
 
     @Override
@@ -43,7 +75,11 @@ class DriveUploaderImpl implements DriveUploader, ResultCallback<DriveApi.Conten
         this.filePath = filePath;
         this.listener = listener;
         if (mClient.isConnected()) {
-            Drive.DriveApi.newContents(mClient).setResultCallback(this);
+            if (driveId == null) {
+                createFolder();
+            } else {
+                Drive.DriveApi.newContents(mClient).setResultCallback(this);
+            }
         } else {
             listener.authError();
         }
@@ -70,7 +106,7 @@ class DriveUploaderImpl implements DriveUploader, ResultCallback<DriveApi.Conten
         MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
                 .setMimeType("image/jpeg").setTitle(getFileName()).build();
 
-        Drive.DriveApi.getRootFolder(mClient).createFile(mClient, metadataChangeSet, result.getContents())
+        Drive.DriveApi.getFolder(mClient, driveId).createFile(mClient, metadataChangeSet, result.getContents())
                 .setResultCallback(new ResultCallback<DriveFolder.DriveFileResult>() {
                     @Override
                     public void onResult(DriveFolder.DriveFileResult driveFileResult) {
@@ -95,5 +131,12 @@ class DriveUploaderImpl implements DriveUploader, ResultCallback<DriveApi.Conten
     @Override
     public void onConnectionSuspended(int i) {
 
+    }
+
+    private void createFolder() {
+        DriveFolder folder = Drive.DriveApi.getRootFolder(mClient);
+        MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                .setTitle(DRIVE_FOLDER_NAME).build();
+        folder.createFolder(mClient, changeSet).setResultCallback(folderCreatedCallback);
     }
 }

@@ -78,7 +78,7 @@ class ShareViewImpl implements ShareView, ShareHandler {
                 doOpenGallery(filePath);
                 break;
             case DROPBOX:
-//                doUploadDropbox(filePath);
+            case DRIVE:
                 ToastUtils.showToast(context, "Upload file successful.");
                 break;
         }
