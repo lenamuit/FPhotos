@@ -13,7 +13,10 @@ public interface SharePresenter {
         DROPBOX(0),
         SNS(1),
         GALLERY(2),
-        DRIVE(3);
+        DRIVE(3),
+        FACEBOOK(4),
+        MESSAGE(5),
+        INSTAGRAM(6);
         final int nativeInt;
 
         ShareType(int ni) {

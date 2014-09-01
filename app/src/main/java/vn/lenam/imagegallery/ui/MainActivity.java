@@ -20,6 +20,7 @@ import javax.inject.Singleton;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import vn.lenam.imagegallery.BuildConfig;
 import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.data.PrefService;
@@ -61,7 +62,9 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BugSenseHandler.initAndStartSession(this, "2ebd5a77");
+        if (!BuildConfig.DEBUG) {
+            BugSenseHandler.initAndStartSession(this, "2ebd5a77");
+        }
         setContentView(R.layout.activity_main);
 
         MPOFApp.get(this).inject(this);

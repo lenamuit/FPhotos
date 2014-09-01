@@ -14,8 +14,6 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import vn.lenam.imagegallery.data.PrefService;
-
 /**
  * Created by Le Nam on 23-Aug-14.
  */
@@ -29,8 +27,8 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
     @Inject
     RequestQueue requestQueue;
 
-    @Inject
-    PrefService prefService;
+//    @Inject
+//    PrefService prefService;
 
     private String fileName;
     private OnRequestApiCompleted<String> callback;
@@ -75,10 +73,11 @@ class RequestImageFile implements RequestApi<String>, Response.ErrorListener {
      * @return
      */
     private String getFileName(String url) {
-        int imgCounter = prefService.getInt(PrefService.PrefKey.IMG_COUNTER);
-        imgCounter++;
-        prefService.saveInt(PrefService.PrefKey.IMG_COUNTER, imgCounter);
-        return String.format(FILENAME_FORMAT, imgCounter);
+        String[] path = url.split("/");
+        String lastString = path[path.length - 1];
+        path = lastString.split("_");
+        String fbId = path[1];
+        return fbId + ".jpg";
     }
 
     private boolean isFileExists(String fileName) {

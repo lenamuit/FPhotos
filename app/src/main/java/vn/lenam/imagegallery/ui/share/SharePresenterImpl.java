@@ -41,14 +41,13 @@ class SharePresenterImpl implements SharePresenter, OnRequestApiCompleted<String
             case DROPBOX:
                 dropboxUploader.upload(object, this);
                 break;
-            case SNS:
-            case GALLERY:
+            case DRIVE:
+                driveUploader.upload(object, this);
+                break;
+            default:
                 if (shareView != null) {
                     shareView.sharedSuccess(type, object);
                 }
-                break;
-            case DRIVE:
-                driveUploader.upload(object, this);
                 break;
         }
 

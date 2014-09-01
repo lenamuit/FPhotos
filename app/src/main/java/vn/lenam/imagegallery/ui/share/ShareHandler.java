@@ -15,4 +15,11 @@ public interface ShareHandler {
     void startUploadDropbox(Context context, GraphPhotoInfo photo);
 
     void startUploadDrive(Context context, GraphPhotoInfo photo);
+
+    void startShareFacebook(Context context, GraphPhotoInfo photo);
+
+    void startShareMessage(Context context, GraphPhotoInfo photo);
+
+    void startShareInstagram(Context context, GraphPhotoInfo photo);
+
 }

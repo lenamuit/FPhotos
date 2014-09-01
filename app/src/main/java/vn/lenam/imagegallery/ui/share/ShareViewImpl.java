@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
 import com.dropbox.client2.DropboxAPI;
@@ -12,6 +13,7 @@ import com.dropbox.client2.android.AndroidAuthSession;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,15 +29,15 @@ import vn.lenam.imagegallery.helper.ToastUtils;
 class ShareViewImpl implements ShareView, ShareHandler {
 
 
+    private final String pgFacebook = "com.facebook.katana";
+    private final String pgFbMessage = "com.facebook.orca";
+    private final String pgInstagram = "com.instagram.android";
     @Inject
     SharePresenter presenter;
-
     @Inject
     DropboxAPI<AndroidAuthSession> dropboxAPI;
-
     @Inject
     GoogleApiClient googleApiClient;
-
     private Dialog dialog;
     private Context context;
 
@@ -68,6 +70,27 @@ class ShareViewImpl implements ShareView, ShareHandler {
     }
 
     @Override
+    public void startShareFacebook(Context context, GraphPhotoInfo photo) {
+        this.context = context;
+        this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
+        presenter.onStartDownloadFile(SharePresenter.ShareType.FACEBOOK, this, photo);
+    }
+
+    @Override
+    public void startShareMessage(Context context, GraphPhotoInfo photo) {
+        this.context = context;
+        this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
+        presenter.onStartDownloadFile(SharePresenter.ShareType.MESSAGE, this, photo);
+    }
+
+    @Override
+    public void startShareInstagram(Context context, GraphPhotoInfo photo) {
+        this.context = context;
+        this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
+        presenter.onStartDownloadFile(SharePresenter.ShareType.INSTAGRAM, this, photo);
+    }
+
+    @Override
     public void sharedSuccess(SharePresenter.ShareType type, String filePath) {
         dialog.dismiss();
         switch (type) {
@@ -80,6 +103,17 @@ class ShareViewImpl implements ShareView, ShareHandler {
             case DROPBOX:
             case DRIVE:
                 ToastUtils.showToast(context, "Upload file successful.");
+                break;
+            case FACEBOOK:
+                share(pgFacebook, filePath);
+                break;
+            case MESSAGE:
+                share(pgFbMessage, filePath);
+                break;
+            case INSTAGRAM:
+                share(pgInstagram, filePath);
+                break;
+            default:
                 break;
         }
     }
@@ -140,6 +174,27 @@ class ShareViewImpl implements ShareView, ShareHandler {
         sharingIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
         sharingIntent.setType("image/*");
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.msg_share_image)));
+    }
+
+    private boolean share(String nameApp, String imagePath) {
+        LogUtils.w("share " + nameApp);
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("image/jpeg");
+        List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(share, 0);
+        if (!resInfo.isEmpty()) {
+            for (ResolveInfo info : resInfo) {
+                if (info.activityInfo.packageName.toLowerCase().contains(nameApp)
+                        || info.activityInfo.name.toLowerCase().contains(nameApp)) {
+                    share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(imagePath)));
+                    share.setPackage(info.activityInfo.packageName);
+                    context.startActivity(share);
+                    LogUtils.w("share " + nameApp + " >>> OKIE");
+                    return true;
+                }
+            }
+        }
+        LogUtils.w("share " + nameApp + " >>> FAILED");
+        return false;
     }
 
 }
