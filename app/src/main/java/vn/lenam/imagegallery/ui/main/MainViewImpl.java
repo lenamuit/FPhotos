@@ -194,7 +194,14 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
             int pos = viewPager.getCurrentItem();
             shareHandler.startShareInstagram(getContext(), listPhotos.get(pos));
         }
+    }
 
+    @OnClick(R.id.btn_twitter)
+    void shareTwitter() {
+        if (imageFragAdapter.getCount() > 0) {
+            int pos = viewPager.getCurrentItem();
+            shareHandler.startShareTwitter(getContext(), listPhotos.get(pos));
+        }
     }
 
     @OnClick(R.id.btn_info)

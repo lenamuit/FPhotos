@@ -22,4 +22,5 @@ public interface ShareHandler {
 
     void startShareInstagram(Context context, GraphPhotoInfo photo);
 
+    void startShareTwitter(Context context, GraphPhotoInfo graphPhotoInfo);
 }

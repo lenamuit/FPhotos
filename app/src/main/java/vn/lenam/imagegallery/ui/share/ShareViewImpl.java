@@ -32,6 +32,7 @@ class ShareViewImpl implements ShareView, ShareHandler {
     private final String pgFacebook = "com.facebook.katana";
     private final String pgFbMessage = "com.facebook.orca";
     private final String pgInstagram = "com.instagram.android";
+    private final String pgTwitter = "com.twitter.android";
     @Inject
     SharePresenter presenter;
     @Inject
@@ -91,6 +92,13 @@ class ShareViewImpl implements ShareView, ShareHandler {
     }
 
     @Override
+    public void startShareTwitter(Context context, GraphPhotoInfo photo) {
+        this.context = context;
+        this.dialog = ProgressDialog.show(context, "Downloading...", "Please wait...");
+        presenter.onStartDownloadFile(SharePresenter.ShareType.TWITTER, this, photo);
+    }
+
+    @Override
     public void sharedSuccess(SharePresenter.ShareType type, String filePath) {
         dialog.dismiss();
         switch (type) {
@@ -112,6 +120,9 @@ class ShareViewImpl implements ShareView, ShareHandler {
                 break;
             case INSTAGRAM:
                 share(pgInstagram, filePath);
+                break;
+            case TWITTER:
+                share(pgTwitter, filePath);
                 break;
             default:
                 break;
@@ -176,7 +187,7 @@ class ShareViewImpl implements ShareView, ShareHandler {
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.msg_share_image)));
     }
 
-    private boolean share(String nameApp, String imagePath) {
+    private void share(String nameApp, String imagePath) {
         LogUtils.w("share " + nameApp);
         Intent share = new Intent(android.content.Intent.ACTION_SEND);
         share.setType("image/jpeg");
@@ -186,15 +197,18 @@ class ShareViewImpl implements ShareView, ShareHandler {
                 if (info.activityInfo.packageName.toLowerCase().contains(nameApp)
                         || info.activityInfo.name.toLowerCase().contains(nameApp)) {
                     share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(imagePath)));
+                    share.putExtra(Intent.EXTRA_TEXT, "Shared by #FPhotos (http://goo.gl/p3DwIp)");
                     share.setPackage(info.activityInfo.packageName);
                     context.startActivity(share);
                     LogUtils.w("share " + nameApp + " >>> OKIE");
-                    return true;
+                    return;
                 }
             }
         }
         LogUtils.w("share " + nameApp + " >>> FAILED");
-        return false;
+        Uri marketUri = Uri.parse("market://details?id=" + nameApp);
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+        context.startActivity(marketIntent);
     }
 
 }
