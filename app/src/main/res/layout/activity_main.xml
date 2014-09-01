@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/bg_button"
             android:src="@drawable/ic_album" />
 
         <LinearLayout
@@ -55,13 +55,12 @@
             android:orientation="horizontal">
 
             <ImageButton
-
                 android:id="@+id/btn_drive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_dropbox" />
+                android:background="@drawable/bg_button"
+                android:src="@drawable/ic_drive" />
 
             <ImageButton
 
@@ -69,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/bg_button"
                 android:src="@drawable/ic_dropbox" />
 
             <ImageButton
@@ -77,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/bg_button"
                 android:src="@drawable/ic_save" />
 
             <ImageButton
@@ -85,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/bg_button"
                 android:src="@drawable/ic_share" />
         </LinearLayout>
 
@@ -101,32 +100,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_share" />
+                android:background="@drawable/bg_button"
+                android:src="@drawable/ic_facebook" />
 
             <ImageButton
                 android:id="@+id/btn_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_share" />
+                android:background="@drawable/bg_button"
+                android:src="@drawable/ic_message" />
 
             <ImageButton
                 android:id="@+id/btn_instagram"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_share" />
+                android:background="@drawable/bg_button"
+                android:src="@drawable/ic_instagram" />
 
             <ImageButton
                 android:id="@+id/btn_twitter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_share" />
+                android:background="@drawable/bg_button"
+                android:src="@drawable/ic_twitter" />
         </LinearLayout>
 
         <ImageButton
@@ -135,7 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_margin="5dp"
-            android:background="@android:color/transparent"
+            android:background="@drawable/bg_button"
             android:src="@android:drawable/ic_dialog_info" />
 
         <TextView

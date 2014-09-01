@@ -73,7 +73,7 @@ dependencies {
     compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile "com.bugsense.trace:bugsense:3.6.1"
 
-    compile 'com.google.android.gms:play-services:5.0.77'
+    compile 'com.google.android.gms:play-services:4.4.52'
 //    compile('com.google.api-client:google-api-client:1.4.1-beta') {
 //        exclude group: 'com.google.android.google-play-services'
 //    }
