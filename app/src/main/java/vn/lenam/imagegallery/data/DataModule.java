@@ -9,12 +9,14 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import vn.lenam.imagegallery.MPOFApp;
+import vn.lenam.imagegallery.data.photos.PhotosProviderModule;
 
 /**
  * Created by Le Nam on 06-Aug-14.
  */
 @Module(
         injects = {StoreBitmapServiceImpl.class},
+        includes = {PhotosProviderModule.class},
         complete = false,
         library = true
 )

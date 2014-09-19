@@ -8,7 +8,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.ui.album.OnAlbumSelected;
 
 /**
@@ -29,8 +28,7 @@ public class MainModule {
     @Provides
     @Singleton
     public MainPresenter provideMainPresenter(Application app) {
-        presenter = new MainPresenterImpl();
-        MPOFApp.get(app).inject(presenter);
+        presenter = new MainPresenterImpl(app);
         return presenter;
     }
 

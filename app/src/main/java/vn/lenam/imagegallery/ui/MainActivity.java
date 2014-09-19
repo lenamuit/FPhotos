@@ -39,6 +39,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 998;
 
     UiLifecycleHelper uiHelper;
+
     @Inject
     Session.StatusCallback sessionStatusCallback;
     @Inject
