@@ -5,7 +5,7 @@ They can view their photos tagged in, their photos in albums etc...
 
 First version had released. https://play.google.com/store/apps/details?id=com.namlh.fphotos
 
-### Project using dependency injector framework ([Dagger](http://square.github.io/dagger/) with following modules
+### Project using dependency injector framework ([Dagger](http://square.github.io/dagger/)) with following modules
 
 
 * [Api Module](https://github.com/lenamuit/FPhotos/blob/master/app/src/main/java/vn/lenam/imagegallery/api/ApiModule.java)
