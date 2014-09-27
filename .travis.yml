@@ -1,0 +1,17 @@
+language: android
+jdk: oraclejdk7
+env:
+#  global:
+
+android:
+  components:
+    - build-tools-19.1.0
+    - android-19
+  licenses:
+    - android-sdk-license-5be876d5 # new license!
+
+before_install:
+  - chmod +x ./gradlew
+
+script:
+  - ./gradlew assembleDebug -PdisablePreDex
