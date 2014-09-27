@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 repositories {
     maven {
-        url "http://www.bugsense.com/gradle/"
+        url "https://mint.splunk.com/gradle/"
     }
 }
 
@@ -71,7 +71,7 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.6'
     compile 'com.jakewharton:disklrucache:2.0.2'
     compile 'com.google.code.findbugs:jsr305:3.0.0'
-    compile "com.bugsense.trace:bugsense:3.6.1"
+    compile "com.splunk.mint:mint:4.0"
 
     compile 'com.google.android.gms:play-services:4.4.52'
 //    compile('com.google.api-client:google-api-client:1.4.1-beta') {

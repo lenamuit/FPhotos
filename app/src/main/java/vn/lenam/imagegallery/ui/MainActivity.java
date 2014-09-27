@@ -5,7 +5,6 @@ import android.content.IntentSender;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-import com.bugsense.trace.BugSenseHandler;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.facebook.Session;
@@ -13,6 +12,7 @@ import com.facebook.UiLifecycleHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.splunk.mint.Mint;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -63,7 +63,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!BuildConfig.DEBUG) {
-            BugSenseHandler.initAndStartSession(this, "2ebd5a77");
+            Mint.initAndStartSession(this, "2ebd5a77");
         }
         setContentView(R.layout.activity_main);
 

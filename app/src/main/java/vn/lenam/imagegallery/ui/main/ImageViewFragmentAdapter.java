@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.bugsense.trace.BugSenseHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +27,7 @@ class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
         try {
             notifyDataSetChanged();
         } catch (Exception e) {
-            BugSenseHandler.addCrashExtraData("ImageViewFragmentAdapter", "addPhotos");
+//            Mint.addCrashExtraData("ImageViewFragmentAdapter", "addPhotos");
         }
     }
 
