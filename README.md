@@ -5,6 +5,13 @@ They can view their photos tagged in, their photos in albums etc...
 
 First version had released. https://play.google.com/store/apps/details?id=com.namlh.fphotos
 
+**My purpose is research about Dependency Injector when develop an Android project, define how to develop a project with many modules, flexible to change or update modules. 
+Support unit test and drive test model**
+
+### Continuous Integration result ###
+
+[![Build Status](https://travis-ci.org/lenamuit/FPhotos.svg?branch=master)](https://travis-ci.org/lenamuit/FPhotos)
+
 ### Project using dependency injector framework ([Dagger](http://square.github.io/dagger/)) with following modules
 
 
