@@ -15,26 +15,17 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.splunk.mint.Mint;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 import vn.lenam.imagegallery.BuildConfig;
 import vn.lenam.imagegallery.MPOFApp;
-import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.data.PrefService;
 import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.services.dropbox.DropboxAuthCallback;
-import vn.lenam.imagegallery.ui.album.AlbumsDialog;
-import vn.lenam.imagegallery.ui.main.MainViewImpl;
-
 
 /**
- * Created by Le Nam on 06-Aug-14.
+ * Created by namlh on 9/29/14.
  */
-@Singleton
-public class MainActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class BaseActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 998;
 
@@ -51,32 +42,32 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
     @Inject
     GoogleApiClient googleApiClient;
 
-    @InjectView(R.id.container)
-    MainViewImpl container;
-
-    private AlbumsDialog albumsView;
-    private GoogleApiClient.ConnectionCallbacks driveConnectionCallback;
-    private GoogleApiClient.OnConnectionFailedListener driveOnConnectionFailed;
-
-//    private GoogleApiClient mGoogleApiClient;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!BuildConfig.DEBUG) {
             Mint.initAndStartSession(this, "2ebd5a77");
         }
-        setContentView(R.layout.activity_main);
-
         MPOFApp.get(this).inject(this);
-
-        ButterKnife.inject(this);
 
         uiHelper = new UiLifecycleHelper(this, sessionStatusCallback);
         uiHelper.onCreate(savedInstanceState);
 
         //Activity will handle connection fail
         googleApiClient.registerConnectionFailedListener(this);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
+            } catch (IntentSender.SendIntentException e) {
+                // Unable to resolve, message user appropriately
+            }
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+        }
     }
 
     @Override
@@ -117,22 +108,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
         uiHelper.onSaveInstanceState(outState);
     }
 
-    @OnClick(R.id.btn_albums)
-    void showAblumPopup() {
-        if (albumsView == null) {
-            albumsView = new AlbumsDialog(this);
-        }
-        albumsView.show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (container.onBackPressed()) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
     /**
      * handle dropbox on resume
      */
@@ -154,19 +129,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
             }
         } else {
             dropboxAuthCallback.authFail();
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
-            } catch (IntentSender.SendIntentException e) {
-                // Unable to resolve, message user appropriately
-            }
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
         }
     }
 }

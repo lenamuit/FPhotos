@@ -145,9 +145,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Override
     public void onPageSelected(int position) {
-        if (position >= imageFragAdapter.getCount() - 5) {
-            presenter.onNeedLoadmore();
-        }
+//        if (position >= imageFragAdapter.getCount() - 5) {
+//            presenter.onNeedLoadmore();
+//        }
     }
 
     @Override
