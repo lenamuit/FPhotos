@@ -26,6 +26,11 @@ public class MainActivity extends BaseActivity {
         ButterKnife.inject(this);
     }
 
+    @Override
+    public void facebookSessionOpened() {
+        container.loadData();
+    }
+
     @OnClick(R.id.btn_albums)
     void showAblumPopup() {
         if (albumsView == null) {

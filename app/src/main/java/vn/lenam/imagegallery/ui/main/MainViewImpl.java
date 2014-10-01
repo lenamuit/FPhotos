@@ -75,6 +75,10 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         photoInfoPopupWindow = new PhotoInfoPopupWindow(context);
     }
 
+    void loadData(){
+        presenter.checkLoginStatus(this);
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -86,7 +90,6 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
         viewPager.setOnPageChangeListener(this);
-        presenter.checkLoginStatus(this);
         tvMessage.setText(getContext().getString(R.string.loading_photo_you_are_tagged_in));
     }
 
@@ -101,8 +104,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @Override
     public void showButtonFacebook() {
         if (lnLogin != null) {
-            lnLogin.setVisibility(View.VISIBLE);
-            lnContent.setVisibility(GONE);
+//            lnLogin.setVisibility(View.VISIBLE);
+//            lnContent.setVisibility(GONE);
+
         }
     }
 
@@ -145,9 +149,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
 
     @Override
     public void onPageSelected(int position) {
-//        if (position >= imageFragAdapter.getCount() - 5) {
-//            presenter.onNeedLoadmore();
-//        }
+        if (position == imageFragAdapter.getCount()-5) {
+            addPhotos(presenter.getMorePhotos());
+        }
     }
 
     @Override
@@ -227,7 +231,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         }
     }
 
-    public boolean onBackPressed() {
+    boolean onBackPressed() {
         return photoInfoPopupWindow.dismiss();
     }
 

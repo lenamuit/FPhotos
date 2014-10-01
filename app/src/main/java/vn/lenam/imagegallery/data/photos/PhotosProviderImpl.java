@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import vn.lenam.imagegallery.api.OnRequestApiCompleted;
 import vn.lenam.imagegallery.api.RequestApi;
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.helper.LogUtils;
 
 /**
  * Created by namlh on 9/19/14.
@@ -20,12 +21,12 @@ class PhotosProviderImpl implements PhotosProvider, OnRequestApiCompleted<List<G
 
     private List<GraphPhotoInfo> photos = new ArrayList<GraphPhotoInfo>();
     private List<PhotosProviderListener> listeners = new ArrayList<PhotosProviderListener>();
-    private int page;
+    private int page =-1;
     private int numPhotosInPage = 0;
 
     @Override
     public void onStart(String path) {
-        page = 0;
+        LogUtils.w("getPage onstart path = "+path);
         requestPhotos.request(path, this);
     }
 
@@ -41,16 +42,18 @@ class PhotosProviderImpl implements PhotosProvider, OnRequestApiCompleted<List<G
 
     @Override
     public List<GraphPhotoInfo> getPage(int page) {
+        LogUtils.w("getPage = "+page);
         if (page > this.page) {
             return null;
         }
-        int start = (page - 1) * numPhotosInPage;
+        int start = page * numPhotosInPage;
         int end = start + numPhotosInPage - 1;
         if (end >= photos.size()) {
             end = photos.size() - 1;
-        } else {
+        } else if (page == this.page){
             requestPhotos.loadmore();
         }
+        LogUtils.w("getPage from "+start + " -> end: "+end + " photos length="+photos.size());
         return photos.subList(start, end);
     }
 
@@ -73,9 +76,11 @@ class PhotosProviderImpl implements PhotosProvider, OnRequestApiCompleted<List<G
         if (numPhotosInPage == 0) {
             numPhotosInPage = object.size();
         }
+        LogUtils.w("getPage add photos "+page);
         photos.addAll(object);
         for (PhotosProviderListener listener : listeners) {
             listener.onRequestPhotosSuccess(page);
         }
+
     }
 }

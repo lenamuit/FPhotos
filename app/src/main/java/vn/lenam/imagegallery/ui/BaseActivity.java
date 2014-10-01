@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -21,18 +22,17 @@ import vn.lenam.imagegallery.MPOFApp;
 import vn.lenam.imagegallery.data.PrefService;
 import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.services.dropbox.DropboxAuthCallback;
+import vn.lenam.imagegallery.ui.login.LoginActivity;
 
 /**
  * Created by namlh on 9/29/14.
  */
-public class BaseActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
+public abstract class BaseActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, Session.StatusCallback {
 
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 998;
 
     UiLifecycleHelper uiHelper;
 
-    @Inject
-    Session.StatusCallback sessionStatusCallback;
     @Inject
     DropboxAuthCallback dropboxAuthCallback;
     @Inject
@@ -42,6 +42,8 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient.On
     @Inject
     GoogleApiClient googleApiClient;
 
+    private boolean isFacebookOpened = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,7 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient.On
         }
         MPOFApp.get(this).inject(this);
 
-        uiHelper = new UiLifecycleHelper(this, sessionStatusCallback);
+        uiHelper = new UiLifecycleHelper(this, this);
         uiHelper.onCreate(savedInstanceState);
 
         //Activity will handle connection fail
@@ -75,6 +77,13 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient.On
         super.onResume();
         uiHelper.onResume();
         dropboxResume();
+        if (Session.getActiveSession() != null && !Session.getActiveSession().isOpened()) {
+            startActivityForResult(new Intent(this, LoginActivity.class),0);
+        }
+        else{
+            isFacebookOpened = true;
+            facebookSessionOpened();
+        }
     }
 
     @Override
@@ -131,4 +140,13 @@ public class BaseActivity extends FragmentActivity implements GoogleApiClient.On
             dropboxAuthCallback.authFail();
         }
     }
+
+    @Override
+    public void call(Session session, SessionState state, Exception exception) {
+        if (session != null && session.isOpened() && !isFacebookOpened){
+            facebookSessionOpened();
+        }
+    }
+
+    public abstract void facebookSessionOpened();
 }
