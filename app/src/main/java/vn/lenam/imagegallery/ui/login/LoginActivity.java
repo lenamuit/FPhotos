@@ -1,5 +1,6 @@
 package vn.lenam.imagegallery.ui.login;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -21,7 +22,7 @@ import java.util.Arrays;
 
 import vn.lenam.imagegallery.R;
 
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends Activity {
 
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -113,19 +114,8 @@ public class LoginActivity extends ActionBarActivity {
             Log.e("NamLH", "Session close");
         } else if (state.isOpened()) {
             Log.e("NamLH", "Session open");
-            Request.executeBatchAsync(Request.newMeRequest(session, new Request.GraphUserCallback() {
-
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-
-                }
-            }));
-            Request request = Request.newGraphPathRequest(session, "photos", new Request.Callback() {
-                @Override
-                public void onCompleted(Response response) {
-                    response.getGraphObject();
-                }
-            });
+            setResult(RESULT_OK);
+            finish();
         }
     }
 }

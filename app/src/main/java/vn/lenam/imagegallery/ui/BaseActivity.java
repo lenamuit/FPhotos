@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -15,32 +16,23 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.splunk.mint.Mint;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 import vn.lenam.imagegallery.BuildConfig;
 import vn.lenam.imagegallery.MPOFApp;
-import vn.lenam.imagegallery.R;
 import vn.lenam.imagegallery.data.PrefService;
 import vn.lenam.imagegallery.helper.LogUtils;
 import vn.lenam.imagegallery.services.dropbox.DropboxAuthCallback;
-import vn.lenam.imagegallery.ui.album.AlbumsDialog;
-import vn.lenam.imagegallery.ui.main.MainViewImpl;
-
+import vn.lenam.imagegallery.ui.login.LoginActivity;
 
 /**
- * Created by Le Nam on 06-Aug-14.
+ * Created by namlh on 9/29/14.
  */
-@Singleton
-public class MainActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
+public abstract class BaseActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, Session.StatusCallback {
 
     private static final int RESOLVE_CONNECTION_REQUEST_CODE = 998;
 
     UiLifecycleHelper uiHelper;
-    @Inject
-    Session.StatusCallback sessionStatusCallback;
+
     @Inject
     DropboxAuthCallback dropboxAuthCallback;
     @Inject
@@ -50,14 +42,7 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
     @Inject
     GoogleApiClient googleApiClient;
 
-    @InjectView(R.id.container)
-    MainViewImpl container;
-
-    private AlbumsDialog albumsView;
-    private GoogleApiClient.ConnectionCallbacks driveConnectionCallback;
-    private GoogleApiClient.OnConnectionFailedListener driveOnConnectionFailed;
-
-//    private GoogleApiClient mGoogleApiClient;
+    private boolean isFacebookOpened = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +50,9 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
         if (!BuildConfig.DEBUG) {
             Mint.initAndStartSession(this, "2ebd5a77");
         }
-        setContentView(R.layout.activity_main);
-
         MPOFApp.get(this).inject(this);
 
-        ButterKnife.inject(this);
-
-        uiHelper = new UiLifecycleHelper(this, sessionStatusCallback);
+        uiHelper = new UiLifecycleHelper(this, this);
         uiHelper.onCreate(savedInstanceState);
 
         //Activity will handle connection fail
@@ -79,10 +60,29 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
     }
 
     @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                connectionResult.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
+            } catch (IntentSender.SendIntentException e) {
+                // Unable to resolve, message user appropriately
+            }
+        } else {
+            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
         dropboxResume();
+        if (Session.getActiveSession() != null && !Session.getActiveSession().isOpened()) {
+            startActivityForResult(new Intent(this, LoginActivity.class), 0);
+        } else if (!isFacebookOpened) {
+            isFacebookOpened = true;
+            facebookSessionOpened();
+        }
     }
 
     @Override
@@ -116,22 +116,6 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
         uiHelper.onSaveInstanceState(outState);
     }
 
-    @OnClick(R.id.btn_albums)
-    void showAblumPopup() {
-        if (albumsView == null) {
-            albumsView = new AlbumsDialog(this);
-        }
-        albumsView.show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (container.onBackPressed()) {
-            return;
-        }
-        super.onBackPressed();
-    }
-
     /**
      * handle dropbox on resume
      */
@@ -157,15 +141,12 @@ public class MainActivity extends FragmentActivity implements GoogleApiClient.On
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult(this, RESOLVE_CONNECTION_REQUEST_CODE);
-            } catch (IntentSender.SendIntentException e) {
-                // Unable to resolve, message user appropriately
-            }
-        } else {
-            GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), this, 0).show();
+    public void call(Session session, SessionState state, Exception exception) {
+        if (session != null && session.isOpened() && !isFacebookOpened) {
+            isFacebookOpened = true;
+            facebookSessionOpened();
         }
     }
+
+    public abstract void facebookSessionOpened();
 }

@@ -31,14 +31,16 @@ import vn.lenam.imagegallery.api.ApiModule;
 import vn.lenam.imagegallery.data.DataModule;
 import vn.lenam.imagegallery.services.drive.DriveModule;
 import vn.lenam.imagegallery.services.dropbox.DropboxModule;
-import vn.lenam.imagegallery.ui.MainActivity;
+import vn.lenam.imagegallery.ui.BaseActivity;
 import vn.lenam.imagegallery.ui.album.AlbumModule;
+import vn.lenam.imagegallery.ui.main.MainActivity;
 import vn.lenam.imagegallery.ui.main.MainModule;
 import vn.lenam.imagegallery.ui.share.ShareModule;
 
 @Module(
         injects = {
                 MPOFApp.class,
+                BaseActivity.class,
                 MainActivity.class
         },
         includes = {

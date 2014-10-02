@@ -28,8 +28,8 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
     @Inject
     AlbumsPresenter albumsPresenter;
 
-    @Inject
-    OnAlbumSelected onAlbumSelected;
+//    @Inject
+//    OnAlbumSelected onAlbumSelected;
 
 
     @Inject
@@ -82,7 +82,7 @@ public class AlbumsDialog implements AlbumsView, AdapterView.OnItemClickListener
         String path = album.getId() + "_photos";
         if (album.getCount() > 0) {
             if (NetworkHelper.isConnected(context) || jsonCache.get("photo_in_list" + path, 0) != null) {
-                onAlbumSelected.onSelected(adapter.getItem(position));
+//                onAlbumSelected.onSelected(adapter.getItem(position));
                 dialog.dismiss();
             } else {
                 ToastUtils.showToast(context, R.string.msg_no_photos_in_cache);

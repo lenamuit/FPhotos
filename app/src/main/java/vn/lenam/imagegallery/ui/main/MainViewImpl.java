@@ -33,7 +33,7 @@ import vn.lenam.imagegallery.ui.share.ShareHandler;
 /**
  * Created by Le Nam on 08-Aug-14.
  */
-public class MainViewImpl extends LinearLayout implements MainView, ViewPager.OnPageChangeListener {
+public class MainViewImpl extends LinearLayout implements MainView {
 
     @InjectView(R.id.authButton)
     LoginButton authButton;
@@ -55,8 +55,6 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @InjectView(R.id.ln_share_action)
     View lnShareAction;
 
-    @Inject
-    MainPresenter presenter;
     @Inject
     ShareHandler shareHandler;
 
@@ -83,10 +81,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         //TODO need inject permission list
         authButton.setReadPermissions(Arrays.asList("email", "user_photos"));
         viewPager.setOffscreenPageLimit(1);
-        imageFragAdapter = new ImageViewFragmentAdapter(fragmentManager);
+        imageFragAdapter = new ImageViewFragmentAdapter(getContext(), fragmentManager);
         viewPager.setAdapter(imageFragAdapter);
-        viewPager.setOnPageChangeListener(this);
-        presenter.checkLoginStatus(this);
+//        viewPager.setOnPageChangeListener(this);
         tvMessage.setText(getContext().getString(R.string.loading_photo_you_are_tagged_in));
     }
 
@@ -101,8 +98,9 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     @Override
     public void showButtonFacebook() {
         if (lnLogin != null) {
-            lnLogin.setVisibility(View.VISIBLE);
-            lnContent.setVisibility(GONE);
+//            lnLogin.setVisibility(View.VISIBLE);
+//            lnContent.setVisibility(GONE);
+
         }
     }
 
@@ -113,7 +111,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
             tvMessage.setText(getContext().getString(R.string.no_photo_found));
         } else {
             tvMessage.setVisibility(GONE);
-            imageFragAdapter.addPhotos(photos);
+//            imageFragAdapter.addPhotos(photos);
             listPhotos.addAll(photos);
         }
 
@@ -123,7 +121,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     public void clearPhotos() {
         listPhotos.clear();
         viewPager.setCurrentItem(0);
-        imageFragAdapter.clear();
+//        imageFragAdapter.clear();
     }
 
     @Override
@@ -136,23 +134,6 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
     public void hideNoticeNoNetwork() {
         tvNoInternet.setVisibility(GONE);
         lnShareAction.setVisibility(VISIBLE);
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        if (position >= imageFragAdapter.getCount() - 5) {
-            presenter.onNeedLoadmore();
-        }
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
     }
 
     @OnClick(R.id.btn_share)
@@ -227,7 +208,7 @@ public class MainViewImpl extends LinearLayout implements MainView, ViewPager.On
         }
     }
 
-    public boolean onBackPressed() {
+    boolean onBackPressed() {
         return photoInfoPopupWindow.dismiss();
     }
 
