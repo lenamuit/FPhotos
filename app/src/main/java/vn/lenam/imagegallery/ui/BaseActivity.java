@@ -78,9 +78,8 @@ public abstract class BaseActivity extends FragmentActivity implements GoogleApi
         uiHelper.onResume();
         dropboxResume();
         if (Session.getActiveSession() != null && !Session.getActiveSession().isOpened()) {
-            startActivityForResult(new Intent(this, LoginActivity.class),0);
-        }
-        else{
+            startActivityForResult(new Intent(this, LoginActivity.class), 0);
+        } else if (!isFacebookOpened) {
             isFacebookOpened = true;
             facebookSessionOpened();
         }
@@ -143,7 +142,8 @@ public abstract class BaseActivity extends FragmentActivity implements GoogleApi
 
     @Override
     public void call(Session session, SessionState state, Exception exception) {
-        if (session != null && session.isOpened() && !isFacebookOpened){
+        if (session != null && session.isOpened() && !isFacebookOpened) {
+            isFacebookOpened = true;
             facebookSessionOpened();
         }
     }

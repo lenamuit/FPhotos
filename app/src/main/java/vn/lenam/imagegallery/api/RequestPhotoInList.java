@@ -71,9 +71,9 @@ class RequestPhotoInList implements RequestApi<List<GraphPhotoInfo>>, Request.Ca
         Session session = Session.getActiveSession();
         this.onRequestPhotoCompleted = callback;
         currentPage = 0;
+        request = null;
         if (session.isOpened()) {
-            request = Request.newGraphPathRequest(Session.getActiveSession(), path, this);
-            Request.executeBatchAsync(request);
+            Request.executeBatchAsync(Request.newGraphPathRequest(Session.getActiveSession(), path, this));
         }
     }
 

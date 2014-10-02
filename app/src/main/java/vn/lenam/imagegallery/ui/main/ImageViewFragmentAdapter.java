@@ -1,39 +1,32 @@
 package vn.lenam.imagegallery.ui.main;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.inject.Inject;
 
-import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
+import vn.lenam.imagegallery.MPOFApp;
+import vn.lenam.imagegallery.data.photos.PhotosProvider;
+import vn.lenam.imagegallery.data.photos.PhotosProviderListener;
 
 /**
  * Created by Le Nam on 07-Aug-14.
  */
-class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
-    private List<Fragment> fragmentList = new ArrayList<Fragment>();
+class ImageViewFragmentAdapter extends FragmentStatePagerAdapter implements PhotosProviderListener {
+    @Inject
+    PhotosProvider photosProvider;
 
-    public ImageViewFragmentAdapter(FragmentManager fm) {
+    public ImageViewFragmentAdapter(Context context, FragmentManager fm) {
         super(fm);
-    }
-
-    public void addPhotos(List<GraphPhotoInfo> photos) {
-        for (GraphPhotoInfo p : photos) {
-            fragmentList.add(ImageViewFragment.getInstance(p));
-        }
-//        this.photos = photos;
-        try {
-            notifyDataSetChanged();
-        } catch (Exception e) {
-//            Mint.addCrashExtraData("ImageViewFragmentAdapter", "addPhotos");
-        }
+        MPOFApp.get(context).inject(this);
+        photosProvider.addListener(this);
     }
 
     @Override
     public Fragment getItem(int position) {
-        return fragmentList.get(position);
+        return ImageViewFragment.getInstance(photosProvider.getPhoto(position));
     }
 
     @Override
@@ -43,11 +36,11 @@ class ImageViewFragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return fragmentList.size();
+        return photosProvider.getCount();
     }
 
-    public void clear() {
-        fragmentList.clear();
+    @Override
+    public void onRequestPhotosSuccess(int page) {
         notifyDataSetChanged();
     }
 }

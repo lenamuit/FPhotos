@@ -27,6 +27,7 @@ class PhotosProviderImpl implements PhotosProvider, OnRequestApiCompleted<List<G
     @Override
     public void onStart(String path) {
         LogUtils.w("getPage onstart path = "+path);
+        photos.clear();
         requestPhotos.request(path, this);
     }
 
@@ -40,29 +41,21 @@ class PhotosProviderImpl implements PhotosProvider, OnRequestApiCompleted<List<G
         listeners.add(listener);
     }
 
-    @Override
-    public List<GraphPhotoInfo> getPage(int page) {
-        LogUtils.w("getPage = "+page);
-        if (page > this.page) {
-            return null;
-        }
-        int start = page * numPhotosInPage;
-        int end = start + numPhotosInPage - 1;
-        if (end >= photos.size()) {
-            end = photos.size() - 1;
-        } else if (page == this.page){
-            requestPhotos.loadmore();
-        }
-        LogUtils.w("getPage from "+start + " -> end: "+end + " photos length="+photos.size());
-        return photos.subList(start, end);
-    }
 
     @Override
     public GraphPhotoInfo getPhoto(int pos) {
         if (pos < 0 || pos >= photos.size()) {
             return null;
         }
+        if (pos == photos.size() - 5) {
+            requestPhotos.loadmore();
+        }
         return photos.get(pos);
+    }
+
+    @Override
+    public int getCount() {
+        return photos.size();
     }
 
     @Override
@@ -81,6 +74,5 @@ class PhotosProviderImpl implements PhotosProvider, OnRequestApiCompleted<List<G
         for (PhotosProviderListener listener : listeners) {
             listener.onRequestPhotosSuccess(page);
         }
-
     }
 }

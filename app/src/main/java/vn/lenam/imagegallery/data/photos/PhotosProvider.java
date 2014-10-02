@@ -1,7 +1,5 @@
 package vn.lenam.imagegallery.data.photos;
 
-import java.util.List;
-
 import vn.lenam.imagegallery.api.model.GraphPhotoInfo;
 
 /**
@@ -14,9 +12,11 @@ public interface PhotosProvider {
 
     void addListener(PhotosProviderListener listener);
 
-    List<GraphPhotoInfo> getPage(int page);
+//    List<GraphPhotoInfo> getPage(int page);
 
     GraphPhotoInfo getPhoto(int pos);
+
+    int getCount();
 
     int getNumOfPagesRequested();
 }
